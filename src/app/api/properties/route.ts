@@ -1,103 +1,83 @@
+/**
+ * Properties API endpoint - uses DataProvider
+ */
+
 import { NextRequest, NextResponse } from 'next/server';
-import { demoProperties, PropertyData } from '@/lib/demo-data';
-import { v4 as uuidv4 } from 'uuid';
+import { getDataProvider } from '@/lib/data-provider';
+import { validatePropertyData } from '@/lib/template-schema';
+import { Property, MintPropertyRequest, ApiResponse, FilterOptions } from '@/types';
+import * as db from '@/lib/db';
 
-interface MintPropertyRequest extends PropertyData {
-  imageUrl: string;
-}
-
-interface MintPropertyResponse {
-  objectId: string;
-  templateId: string;
-  status: string;
-  message: string;
-}
-
-export async function GET(request: NextRequest) {
+export async function GET(req: NextRequest): Promise<Response> {
   try {
-    const { searchParams } = new URL(request.url);
-    const status = searchParams.get('status');
-    const minPrice = searchParams.get('minPrice');
-    const maxPrice = searchParams.get('maxPrice');
+    db.initDb();
 
-    let filtered = [...demoProperties];
+    const { searchParams } = new URL(req.url);
 
-    // Filter by status
-    if (status && status !== 'all') {
-      filtered = filtered.filter((p) => p.propertyData.status === status);
-    }
+    const filters: FilterOptions = {
+      propertyType: searchParams.get('propertyType') || undefined,
+      status: searchParams.get('status') || undefined,
+      orgId: searchParams.get('orgId') || undefined,
+      templateId: searchParams.get('templateId') || undefined,
+      city: searchParams.get('city') || undefined,
+      page: searchParams.get('page') ? parseInt(searchParams.get('page')!, 10) : undefined,
+      pageSize: searchParams.get('pageSize') ? parseInt(searchParams.get('pageSize')!, 10) : undefined,
+    };
 
-    // Filter by price range
-    if (minPrice) {
-      const min = parseFloat(minPrice);
-      filtered = filtered.filter((p) => p.propertyData.price >= min);
-    }
+    const provider = getDataProvider();
+    const result = await provider.listProperties(filters);
 
-    if (maxPrice) {
-      const max = parseFloat(maxPrice);
-      filtered = filtered.filter((p) => p.propertyData.price <= max);
-    }
-
-    return NextResponse.json({
-      properties: filtered,
-      total: filtered.length,
+    return NextResponse.json<ApiResponse<Property[]>>({
+      success: true,
+      data: result.properties,
     });
   } catch (error) {
-    console.error('Properties fetch error:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch properties' },
+    console.error('Failed to list properties:', error);
+    return NextResponse.json<ApiResponse<Property[]>>(
+      {
+        success: false,
+        error: 'Failed to list properties',
+      },
       { status: 500 }
     );
   }
 }
 
-export async function POST(request: NextRequest) {
+export async function POST(req: NextRequest): Promise<Response> {
   try {
-    const body: MintPropertyRequest = await request.json();
+    db.initDb();
 
-    // Validate required fields
-    if (!body.address || !body.city || !body.country || !body.description) {
-      return NextResponse.json(
-        { error: 'Missing required fields' },
+    const body = (await req.json()) as MintPropertyRequest;
+
+    // Validate
+    const validation = validatePropertyData(body);
+    if (!validation.valid) {
+      return NextResponse.json<ApiResponse<Property>>(
+        {
+          success: false,
+          error: validation.errors.join('; '),
+        },
         { status: 400 }
       );
     }
 
-    if (body.price <= 0) {
-      return NextResponse.json(
-        { error: 'Price must be greater than 0' },
-        { status: 400 }
-      );
-    }
+    const provider = getDataProvider();
+    const result = await provider.mintProperty(body);
 
-    // Mock object ID
-    const objectId = uuidv4();
-    const templateId = 'template-001';
-
-    // In a real implementation, this would:
-    // 1. Call DUAL API to create the object
-    // 2. Store property metadata in database
-    // 3. Queue anchoring to blockchain
-    // 4. Return on-chain transaction details
-
-    const response: MintPropertyResponse = {
-      objectId,
-      templateId,
-      status: 'pending_anchoring',
-      message: 'Property minted successfully. Anchoring to blockchain...',
-    };
-
-    // Simulate async anchoring
-    setTimeout(async () => {
-      console.log(`Anchoring property ${objectId} to blockchain...`);
-      // This would call the sequencer/anchoring service
-    }, 1000);
-
-    return NextResponse.json(response, { status: 201 });
+    return NextResponse.json<ApiResponse<{ id: string }>>(
+      {
+        success: true,
+        data: { id: result.id },
+      },
+      { status: 201 }
+    );
   } catch (error) {
-    console.error('Property minting error:', error);
-    return NextResponse.json(
-      { error: 'Failed to mint property' },
+    console.error('Failed to mint property:', error);
+    return NextResponse.json<ApiResponse<Property>>(
+      {
+        success: false,
+        error: 'Failed to mint property',
+      },
       { status: 500 }
     );
   }

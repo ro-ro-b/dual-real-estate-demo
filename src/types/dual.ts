@@ -1,30 +1,95 @@
+/**
+ * Consolidated DUAL Real Estate App Types
+ * Single source of truth for all type definitions
+ */
+
+// Organization Types
 export interface Organization {
   id: string;
   name: string;
-  description: string;
   createdAt: string;
-  balance: number;
-  memberCount: number;
+  members: OrgMember[];
 }
 
-export interface Wallet {
-  id: string;
+export interface OrgMember {
   address: string;
-  email: string;
-  displayName: string;
-  avatarUrl?: string;
+  role: 'admin' | 'member' | 'viewer';
 }
 
+export interface OrgContext {
+  id: string;
+  name: string;
+  role: 'admin' | 'member' | 'viewer';
+}
+
+// Wallet Types
+export interface Wallet {
+  address: string;
+  publicKey?: string;
+  isConnected: boolean;
+}
+
+// Face Types (used in templates)
+export type FaceType = 'image' | '3d' | 'web';
+
+export interface Face {
+  type: FaceType;
+  url: string;
+  metadata?: Record<string, unknown>;
+}
+
+// Property Data - Canonical Definition
+export interface PropertyData {
+  address: string;
+  city: string;
+  state: string;
+  zipCode: string;
+  country: string;
+  latitude?: number;
+  longitude?: number;
+  squareFeet?: number;
+  bedrooms?: number;
+  bathrooms?: number;
+  yearBuilt?: number;
+  propertyType: 'residential' | 'commercial' | 'industrial' | 'land';
+  marketValue?: number;
+  taxAssessedValue?: number;
+  ownerName: string;
+  ownerEmail?: string;
+  ownerPhone?: string;
+  features?: string[];
+  description?: string;
+}
+
+// DUAL Object Type
+export interface DualObject {
+  id: string;
+  templateId: string;
+  orgId: string;
+  ownerWallet: string;
+  data: Record<string, unknown>;
+  status: 'draft' | 'anchored' | 'failed';
+  onChainStatus: 'pending' | 'anchored' | 'failed' | 'none';
+  transactionHash?: string;
+  createdAt: string;
+  updatedAt: string;
+  faces: Face[];
+}
+
+// Property Type
+export interface Property extends DualObject {
+  propertyData: PropertyData;
+}
+
+// Template Types
 export interface Template {
   id: string;
   name: string;
-  description: string;
-  organizationId: string;
-  public: boolean;
-  cloneable: boolean;
+  version: string;
+  orgId: string;
+  schema: Record<string, unknown>;
   properties: TemplateProperty[];
   actions: TemplateAction[];
-  faces: Face[];
   createdAt: string;
   updatedAt: string;
 }
@@ -32,96 +97,152 @@ export interface Template {
 export interface TemplateProperty {
   name: string;
   type: 'string' | 'number' | 'boolean' | 'object' | 'array';
-  description: string;
   required: boolean;
-  defaultValue?: any;
+  description?: string;
 }
 
 export interface TemplateAction {
   name: string;
-  description: string;
-  parameters?: Record<string, any>;
-}
-
-export interface Face {
-  id: string;
-  name: string;
-  type: 'image' | '3d' | 'web';
-  url: string;
-  mimeType?: string;
   description?: string;
+  parameters: Record<string, unknown>;
+  validStates: string[];
 }
 
-export interface DualObject {
-  id: string;
-  templateId: string;
-  templateName: string;
-  organizationId: string;
-  ownerWallet: string;
-  properties: Record<string, any>;
-  faces: Face[];
-  createdAt: string;
-  updatedAt: string;
-  onChainStatus: 'pending' | 'anchored' | 'verified';
+export interface TemplateSchema {
+  [key: string]: {
+    dualField: string;
+    type: string;
+    transform?: (value: unknown) => unknown;
+  };
 }
 
-export interface PropertyData {
-  address: string;
-  squareMeters: number;
-  bedrooms: number;
-  bathrooms: number;
-  price: number;
-  status: 'available' | 'reserved' | 'sold';
-  listingDate: string;
-  geoLocation: { latitude: number; longitude: number };
-  imageUrl?: string;
-  description?: string;
-}
+// Action Types
+export type ActionStatus = 'pending' | 'processing' | 'completed' | 'failed';
 
 export interface Action {
   id: string;
   objectId: string;
-  action: string;
+  type: 'RESERVE' | 'TRANSFER' | 'UPDATE_STATUS' | 'BURN' | 'VIEW_ON_CHAIN' | 'MINT';
   actor: string;
-  parameters: Record<string, any>;
+  parameters: Record<string, unknown>;
+  status: ActionStatus;
+  result?: Record<string, unknown>;
+  error?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ActionRequest {
+  objectId: string;
+  type: string;
+  actor: string;
+  parameters: Record<string, unknown>;
+}
+
+export interface ActionResult {
+  id: string;
+  status: ActionStatus;
+  result?: Record<string, unknown>;
+  error?: string;
+}
+
+// Webhook Types
+export type WebhookEventType =
+  | 'property.anchored'
+  | 'property.anchoring_failed'
+  | 'action.completed'
+  | 'action.failed'
+  | 'template.created'
+  | 'organization.created';
+
+export interface WebhookEvent {
+  id: string;
+  type: WebhookEventType;
+  objectId: string;
+  orgId?: string;
+  data: Record<string, unknown>;
   timestamp: string;
-  status: 'pending' | 'completed' | 'failed';
 }
 
 export interface Webhook {
   id: string;
   url: string;
-  events: string[];
-  organizationId: string;
+  events: WebhookEventType[];
+  orgId: string;
   active: boolean;
   createdAt: string;
 }
 
-export interface WebhookEvent {
-  id: string;
-  event: string;
-  objectId: string;
-  data: Record<string, any>;
-  timestamp: string;
-}
-
+// Authentication Types
 export interface AuthSession {
+  id: string;
+  email: string;
+  wallet: string;
+  orgId: string;
+  orgName: string;
+  role: 'admin' | 'member' | 'viewer';
   token: string;
-  wallet: Wallet;
-  organization: Organization;
   expiresAt: string;
 }
 
+// API Response Types
 export interface ApiResponse<T> {
-  data: T;
-  status: number;
-  message?: string;
+  success: boolean;
+  data?: T;
+  error?: string;
 }
 
 export interface PaginatedResponse<T> {
+  success: boolean;
   data: T[];
   total: number;
   page: number;
   pageSize: number;
   hasMore: boolean;
+}
+
+export interface ErrorResponse {
+  success: false;
+  error: string;
+  code?: string;
+  details?: Record<string, unknown>;
+}
+
+// Mint/Create Property Types
+export interface MintPropertyRequest {
+  propertyData: PropertyData;
+  ownerWallet: string;
+  templateId: string;
+  faces?: Face[];
+}
+
+export interface MintPropertyResponse {
+  id: string;
+  objectId: string;
+  transactionHash?: string;
+  status: 'draft' | 'anchored' | 'failed';
+}
+
+// Query & Filter Types
+export interface FilterOptions {
+  propertyType?: string;
+  status?: string;
+  orgId?: string;
+  templateId?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  city?: string;
+  search?: string;
+  page?: number;
+  pageSize?: number;
+}
+
+export interface DashboardStats {
+  totalProperties: number;
+  totalActions: number;
+  anchoredCount: number;
+  failedCount: number;
+  pendingCount: number;
+  organizations: number;
+  templates: number;
 }

@@ -1,53 +1,55 @@
+/**
+ * Authentication API - demo mode supports email/password, generates wallet
+ */
+
 import { NextRequest, NextResponse } from 'next/server';
-import { v4 as uuidv4 } from 'uuid';
+import { AuthSession, ApiResponse } from '@/types';
+import { generateMockWallet } from '@/lib/wallet';
 
-interface AuthRequest {
-  email: string;
-  password: string;
-}
-
-interface AuthResponse {
-  token: string;
-  session: {
-    userId: string;
-    email: string;
-    wallet: string;
-    organizationId: string;
-  };
-}
-
-export async function POST(request: NextRequest): Promise<NextResponse<AuthResponse>> {
+export async function POST(req: NextRequest): Promise<Response> {
   try {
-    const body: AuthRequest = await request.json();
+    const body = (await req.json()) as {
+      email?: string;
+      password?: string;
+    };
 
-    // Validate input
     if (!body.email || !body.password) {
-      return NextResponse.json(
-        { error: 'Email and password are required' } as any,
+      return NextResponse.json<ApiResponse<AuthSession>>(
+        {
+          success: false,
+          error: 'Email and password are required',
+        },
         { status: 400 }
       );
     }
 
-    // Mock validation - accept any email/password combination
-    const mockToken = Buffer.from(`${body.email}:${Date.now()}`).toString('base64');
-    const mockUserId = uuidv4();
-    const mockWallet = `0x${Math.random().toString(16).substr(2, 40)}`;
+    // For demo: accept any email/password combination
+    const wallet = generateMockWallet();
+    const now = new Date();
+    const expiresAt = new Date(now.getTime() + 24 * 60 * 60 * 1000); // 24 hours
 
-    const response: AuthResponse = {
-      token: mockToken,
-      session: {
-        userId: mockUserId,
-        email: body.email,
-        wallet: mockWallet,
-        organizationId: `org-${body.email.split('@')[0]}`,
-      },
+    const session: AuthSession = {
+      id: `session-${Date.now()}`,
+      email: body.email,
+      wallet,
+      orgId: 'org-1',
+      orgName: 'Demo Organization',
+      role: 'admin',
+      token: Buffer.from(`${body.email}:${wallet}`).toString('base64'),
+      expiresAt: expiresAt.toISOString(),
     };
 
-    return NextResponse.json(response);
+    return NextResponse.json<ApiResponse<AuthSession>>({
+      success: true,
+      data: session,
+    });
   } catch (error) {
     console.error('Auth error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' } as any,
+    return NextResponse.json<ApiResponse<AuthSession>>(
+      {
+        success: false,
+        error: 'Authentication failed',
+      },
       { status: 500 }
     );
   }

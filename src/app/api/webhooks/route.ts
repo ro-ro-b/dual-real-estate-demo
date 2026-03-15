@@ -1,105 +1,83 @@
+/**
+ * Webhook event receiving and processing endpoint
+ */
+
 import { NextRequest, NextResponse } from 'next/server';
+import { getConfig } from '@/lib/env';
+import { WebhookEvent, ApiResponse } from '@/types';
+import { processWebhookEvent } from '@/lib/webhook-handlers';
+import { sseManager } from '@/lib/realtime';
+import * as db from '@/lib/db';
+
 import crypto from 'crypto';
 
-interface WebhookEvent {
-  id: string;
-  type: string;
-  timestamp: string;
-  data: Record<string, unknown>;
+function verifyWebhookSignature(payload: string, signature: string, secret: string): boolean {
+  const expectedSignature = crypto.createHmac('sha256', secret).update(payload).digest('hex');
+  return crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expectedSignature));
 }
 
-interface WebhookPayload {
-  event: WebhookEvent;
-  signature: string;
-}
-
-const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET || 'demo-secret-key';
-
-function validateSignature(payload: string, signature: string): boolean {
-  const hmac = crypto.createHmac('sha256', WEBHOOK_SECRET);
-  hmac.update(payload);
-  const computed = hmac.digest('hex');
-  return crypto.timingSafeEqual(
-    Buffer.from(computed),
-    Buffer.from(signature)
-  );
-}
-
-export async function POST(request: NextRequest) {
+export async function POST(req: NextRequest): Promise<Response> {
   try {
-    const body: WebhookPayload = await request.json();
-    const payload = JSON.stringify(body.event);
+    db.initDb();
 
-    // In production, validate the signature
-    // if (!validateSignature(payload, body.signature)) {
-    //   return NextResponse.json(
-    //     { error: 'Invalid signature' },
-    //     { status: 401 }
-    //   );
-    // }
+    const config = getConfig();
+    const rawBody = await req.text();
+    const signature = req.headers.get('x-webhook-signature');
 
-    // Log webhook event
-    console.log('Webhook received:', {
-      id: body.event.id,
-      type: body.event.type,
-      timestamp: body.event.timestamp,
-      data: body.event.data,
-    });
-
-    // Handle different event types
-    switch (body.event.type) {
-      case 'property.anchored':
-        handlePropertyAnchored(body.event);
-        break;
-      case 'property.anchoring_failed':
-        handleAnchoringFailed(body.event);
-        break;
-      case 'action.completed':
-        handleActionCompleted(body.event);
-        break;
-      case 'action.failed':
-        handleActionFailed(body.event);
-        break;
-      default:
-        console.log('Unknown event type:', body.event.type);
+    // Verify signature if configured
+    if (config.isDualConfigured && signature) {
+      try {
+        if (!verifyWebhookSignature(rawBody, signature, config.dualWebhookSecret)) {
+          return NextResponse.json<ApiResponse<WebhookEvent>>(
+            {
+              success: false,
+              error: 'Invalid webhook signature',
+            },
+            { status: 401 }
+          );
+        }
+      } catch (error) {
+        console.error('Signature verification error:', error);
+      }
     }
 
-    return NextResponse.json({
-      received: true,
-      eventId: body.event.id,
+    const event = JSON.parse(rawBody) as WebhookEvent;
+
+    // Validate event
+    if (!event.id || !event.type || !event.objectId) {
+      return NextResponse.json<ApiResponse<WebhookEvent>>(
+        {
+          success: false,
+          error: 'Invalid webhook event: missing required fields',
+        },
+        { status: 400 }
+      );
+    }
+
+    // Save to DB
+    db.saveWebhookEvent(event.id, event.type, event.objectId, event.data, false);
+
+    // Process event
+    await processWebhookEvent(event);
+
+    // Broadcast to connected SSE clients
+    sseManager.broadcast('webhook-event', {
+      type: event.type,
+      objectId: event.objectId,
+    });
+
+    return NextResponse.json<ApiResponse<WebhookEvent>>({
+      success: true,
+      data: event,
     });
   } catch (error) {
     console.error('Webhook processing error:', error);
-    return NextResponse.json(
-      { error: 'Failed to process webhook' },
+    return NextResponse.json<ApiResponse<WebhookEvent>>(
+      {
+        success: false,
+        error: 'Failed to process webhook',
+      },
       { status: 500 }
     );
   }
-}
-
-function handlePropertyAnchored(event: WebhookEvent) {
-  console.log('Property anchored:', event.data);
-  // Update database with on-chain status
-  // Send notification to user
-  // Update UI in real-time
-}
-
-function handleAnchoringFailed(event: WebhookEvent) {
-  console.log('Property anchoring failed:', event.data);
-  // Update database with failed status
-  // Notify user of failure
-  // Queue retry
-}
-
-function handleActionCompleted(event: WebhookEvent) {
-  console.log('Action completed:', event.data);
-  // Update database with action result
-  // Update property state
-}
-
-function handleActionFailed(event: WebhookEvent) {
-  console.log('Action failed:', event.data);
-  // Update database with failure
-  // Notify user
-  // Queue retry
 }

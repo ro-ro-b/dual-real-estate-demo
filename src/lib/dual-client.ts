@@ -1,147 +1,271 @@
-const API_BASE = process.env.NEXT_PUBLIC_DUAL_API_URL || 'https://blockv-labs.io';
+/**
+ * DUAL Protocol API Client
+ * Properly typed, no 'any' usage
+ */
 
-class DualClient {
-  private token: string | null = null;
-  private apiKey: string | null = null;
+import { getConfig } from './env';
+import {
+  Organization,
+  Template,
+  Property,
+  DualObject,
+  Webhook,
+  WebhookEventType,
+  Action,
+  ActionResult,
+} from '@/types';
 
-  constructor(config?: { token?: string; apiKey?: string }) {
-    this.token = config?.token || null;
-    this.apiKey = config?.apiKey || null;
+export class DualApiError extends Error {
+  constructor(
+    message: string,
+    public statusCode: number,
+    public details: Record<string, unknown> = {}
+  ) {
+    super(message);
+    this.name = 'DualApiError';
+  }
+}
+
+export class DualClient {
+  private baseUrl: string;
+  private apiKey: string;
+  private orgId: string;
+  private configured: boolean;
+
+  constructor() {
+    try {
+      const config = getConfig();
+      this.baseUrl = config.dualApiUrl;
+      this.apiKey = config.dualApiKey;
+      this.orgId = config.dualOrgId;
+      this.configured = config.isDualConfigured;
+    } catch {
+      this.baseUrl = '';
+      this.apiKey = '';
+      this.orgId = '';
+      this.configured = false;
+    }
+  }
+
+  isConfigured(): boolean {
+    return this.configured;
+  }
+
+  private getHeaders(): Record<string, string> {
+    return {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${this.apiKey}`,
+    };
   }
 
   private async request<T>(
+    method: string,
     path: string,
-    options?: RequestInit,
+    body?: Record<string, unknown>
   ): Promise<T> {
-    const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
-      ...(options?.headers as Record<string, string>),
-    };
-    if (this.token) headers['Authorization'] = 'Bearer ' + this.token;
-    if (this.apiKey) headers['X-Api-Key'] = this.apiKey;
+    if (!this.configured) {
+      throw new DualApiError('DUAL API not configured', 503, { message: 'Set DUAL_CONFIGURED=true' });
+    }
 
-    const res = await fetch(API_BASE + path, { ...options, headers });
-    if (!res.ok) {
-      const error = await res
-        .json()
-        .catch(() => ({ message: res.statusText }));
+    const url = `${this.baseUrl}${path}`;
+    const options: RequestInit = {
+      method,
+      headers: this.getHeaders(),
+    };
+
+    if (body) {
+      options.body = JSON.stringify(body);
+    }
+
+    const response = await fetch(url, options);
+    const data = (await response.json()) as Record<string, unknown>;
+
+    if (!response.ok) {
       throw new DualApiError(
-        res.status,
-        error.message || res.statusText,
-        error,
+        `DUAL API Error: ${response.statusText}`,
+        response.status,
+        data
       );
     }
-    return res.json();
+
+    return data as T;
   }
 
-  // Auth
-  async login(email: string, password: string) {
-    return this.request<{ token: string }>('/wallets/login', {
-      method: 'POST',
-      body: JSON.stringify({ email, password }),
+  // Properties
+  async listProperties(filters?: Record<string, unknown>): Promise<DualObject[]> {
+    const queryParams = new URLSearchParams();
+    if (filters) {
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          queryParams.append(key, String(value));
+        }
+      });
+    }
+
+    const path = `/objects?${queryParams.toString()}`;
+    const response = await this.request<{ objects: DualObject[] }>('GET', path);
+    return response.objects;
+  }
+
+  async getProperty(objectId: string): Promise<DualObject> {
+    return this.request<DualObject>('GET', `/objects/${objectId}`);
+  }
+
+  async mintProperty(
+    templateId: string,
+    ownerWallet: string,
+    propertyData: Record<string, unknown>
+  ): Promise<DualObject> {
+    const response = await this.request<DualObject>('POST', '/objects', {
+      templateId,
+      ownerWallet,
+      data: propertyData,
     });
+    return response;
   }
 
   // Templates
-  async createTemplate(data: any) {
-    return this.request('/templates', {
-      method: 'POST',
-      body: JSON.stringify({ template: data }),
-    });
+  async getTemplate(templateId: string): Promise<Template> {
+    return this.request<Template>('GET', `/templates/${templateId}`);
   }
 
-  async getTemplate(id: string) {
-    return this.request('/templates/' + id);
+  async listTemplates(): Promise<Template[]> {
+    const response = await this.request<{ templates: Template[] }>('GET', '/templates');
+    return response.templates;
   }
 
-  async listTemplates(orgId: string) {
-    return this.request('/templates?organization_id=' + orgId);
-  }
-
-  // Objects
-  async mintObject(data: any) {
-    return this.request('/objects', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    });
-  }
-
-  async getObject(id: string) {
-    return this.request('/objects/' + id);
-  }
-
-  async listObjects(params: Record<string, string>) {
-    const qs = new URLSearchParams(params).toString();
-    return this.request('/objects?' + qs);
-  }
-
-  async searchObjects(query: any) {
-    return this.request('/objects/search', {
-      method: 'POST',
-      body: JSON.stringify(query),
+  async createTemplate(
+    name: string,
+    version: string,
+    schema: Record<string, unknown>
+  ): Promise<Template> {
+    return this.request<Template>('POST', '/templates', {
+      name,
+      version,
+      schema,
+      orgId: this.orgId,
     });
   }
 
   // Actions
-  async executeAction(data: any) {
-    return this.request('/ebus/actions', {
-      method: 'POST',
-      body: JSON.stringify(data),
+  async executeAction(
+    objectId: string,
+    actionType: string,
+    actor: string,
+    parameters: Record<string, unknown>
+  ): Promise<Action> {
+    return this.request<Action>('POST', `/objects/${objectId}/actions`, {
+      actionType,
+      actor,
+      parameters,
     });
   }
 
-  async getActionTypes() {
-    return this.request('/ebus/action-types');
+  async getAction(actionId: string): Promise<Action> {
+    return this.request<Action>('GET', `/actions/${actionId}`);
   }
 
-  // Faces
-  async addFace(templateId: string, face: any) {
-    return this.request('/templates/' + templateId + '/faces', {
-      method: 'POST',
-      body: JSON.stringify(face),
+  async getPropertyActions(objectId: string): Promise<Action[]> {
+    const response = await this.request<{ actions: Action[] }>('GET', `/objects/${objectId}/actions`);
+    return response.actions;
+  }
+
+  // Organizations
+  async createOrganization(name: string): Promise<Organization> {
+    return this.request<Organization>('POST', '/organizations', { name });
+  }
+
+  async getOrganization(orgId: string): Promise<Organization> {
+    return this.request<Organization>('GET', `/organizations/${orgId}`);
+  }
+
+  async listOrganizations(): Promise<Organization[]> {
+    const response = await this.request<{ organizations: Organization[] }>('GET', '/organizations');
+    return response.organizations;
+  }
+
+  async addOrganizationMember(
+    orgId: string,
+    address: string,
+    role: 'admin' | 'member' | 'viewer'
+  ): Promise<Organization> {
+    return this.request<Organization>('POST', `/organizations/${orgId}/members`, {
+      address,
+      role,
     });
   }
 
   // Webhooks
-  async createWebhook(data: any) {
-    return this.request('/webhooks', {
-      method: 'POST',
-      body: JSON.stringify(data),
+  async subscribeWebhook(
+    url: string,
+    events: WebhookEventType[]
+  ): Promise<Webhook> {
+    return this.request<Webhook>('POST', '/webhooks', {
+      url,
+      events,
+      orgId: this.orgId,
     });
   }
 
-  async listWebhooks(orgId: string) {
-    return this.request('/webhooks?organization_id=' + orgId);
+  async listWebhooks(): Promise<Webhook[]> {
+    const response = await this.request<{ webhooks: Webhook[] }>('GET', '/webhooks');
+    return response.webhooks;
   }
 
-  // Indexer
-  async getOnChainState(objectId: string) {
-    return this.request('/indexer/objects/' + objectId);
+  async deleteWebhook(webhookId: string): Promise<void> {
+    await this.request<Record<string, unknown>>('DELETE', `/webhooks/${webhookId}`);
   }
 
-  // Payments
-  async getPaymentConfig() {
-    return this.request('/payments/config');
+  // Sequencer
+  async getBatch(batchId: string): Promise<Record<string, unknown>> {
+    return this.request<Record<string, unknown>>('GET', `/batches/${batchId}`);
   }
 
-  setToken(token: string) {
-    this.token = token;
+  async listBatches(): Promise<Record<string, unknown>[]> {
+    const response = await this.request<{ batches: Record<string, unknown>[] }>('GET', '/batches');
+    return response.batches;
+  }
+
+  // Storage
+  async uploadFile(fileData: Buffer, filename: string): Promise<string> {
+    if (!this.configured) {
+      throw new DualApiError('DUAL API not configured', 503);
+    }
+
+    const formData = new FormData();
+    formData.append('file', new Blob([new Uint8Array(fileData)]), filename);
+
+    const response = await fetch(`${this.baseUrl}/storage/upload`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${this.apiKey}`,
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new DualApiError(`Upload failed: ${response.statusText}`, response.status);
+    }
+
+    const data = (await response.json()) as { url?: string };
+    if (!data.url) {
+      throw new DualApiError('No URL returned from upload', 400);
+    }
+
+    return data.url;
+  }
+
+  async getFileUrl(fileId: string): Promise<string> {
+    const response = await this.request<{ url: string }>('GET', `/storage/${fileId}`);
+    return response.url;
+  }
+
+  // EIP-712 Signing (Placeholder)
+  signRequest(_payload: Record<string, unknown>): string {
+    // TODO: Implement EIP-712 signing when web3 provider is available
+    // For now return a placeholder signature
+    return '0x' + 'b'.repeat(130); // 65 bytes (130 hex chars)
   }
 }
 
-class DualApiError extends Error {
-  status: number;
-  details: any;
-
-  constructor(status: number, message: string, details?: any) {
-    super(message);
-    this.status = status;
-    this.details = details;
-  }
-}
-
-export const dualClient = new DualClient({
-  apiKey: process.env.DUAL_API_KEY,
-});
-
-export { DualClient, DualApiError };
+export const dualClient = new DualClient();
