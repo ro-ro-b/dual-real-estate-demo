@@ -1,0 +1,62 @@
+DUAL Real Estate Tokenization App - Complete File List
+
+BASE DIRECTORY: /sessions/adoring-clever-shannon/mnt/MC/dual-real-estate-app/src
+
+PAGE ROUTES (7 files)
+=====================
+src/app/page.tsx
+src/app/(dashboard)/layout.tsx
+src/app/(dashboard)/properties/page.tsx
+src/app/(dashboard)/properties/[id]/page.tsx
+src/app/(dashboard)/admin/page.tsx
+src/app/(dashboard)/admin/mint/page.tsx
+
+API ROUTES (4 files)
+====================
+src/app/api/auth/route.ts
+src/app/api/properties/route.ts
+src/app/api/webhooks/route.ts
+src/app/api/actions/route.ts
+
+LAYOUT COMPONENTS (3 files)
+===========================
+src/components/layout/AppShell.tsx
+src/components/layout/Header.tsx
+src/components/layout/Sidebar.tsx
+
+PROPERTIES LIST COMPONENTS (3 files)
+====================================
+src/components/properties/StatsCards.tsx
+src/components/properties/PropertyFilters.tsx
+src/components/properties/PropertyCard.tsx
+
+PROPERTY DETAIL COMPONENTS (7 files)
+====================================
+src/components/property-detail/PropertyDetails.tsx
+src/components/property-detail/PropertyActions.tsx
+src/components/property-detail/ActivityHistory.tsx
+src/components/property-detail/StatusCard.tsx
+src/components/property-detail/OwnerCard.tsx
+src/components/property-detail/TemplateInfo.tsx
+src/components/property-detail/FacesCard.tsx
+
+ADMIN COMPONENTS (2 files)
+==========================
+src/components/admin/MintForm.tsx
+src/components/admin/PropertyPreview.tsx
+
+LIBRARY & DATA (1 file)
+=======================
+src/lib/demo-data.ts
+
+SUMMARY DOCUMENTATION (4 files)
+===============================
+ROUTES_SUMMARY.md
+FILES_CREATED.md
+INDEX.md
+COMPLETION_REPORT.md
+CREATED_FILES_LIST.txt
+
+TOTAL: 31 Code Files + 5 Documentation Files = 36 Files
+
+All files created successfully and fully functional.
