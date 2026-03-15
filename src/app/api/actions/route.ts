@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 /**
  * Actions API endpoint - uses DataProvider and validates with action-types
  */

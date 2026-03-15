@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 /**
  * Faces API endpoint for adding faces to templates
  */

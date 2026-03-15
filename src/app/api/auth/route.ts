@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 /**
  * Authentication API - demo mode supports email/password, generates wallet
  */

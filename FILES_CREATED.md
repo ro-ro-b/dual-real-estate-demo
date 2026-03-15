@@ -1,145 +1,121 @@
-# Files Created - DUAL Real Estate Tokenization App
+# DUAL Real Estate App Integration Layer - Files Created
 
-## Summary
-- **7 Page Routes** (including layouts and dynamic routes)
-- **4 API Routes** (REST endpoints)
-- **19 Component Files** (reusable React components)
-- **1 Demo Data File** (mock data with types)
-- **Total: 31 Production-Ready Files**
+## Type Definitions
+- `/src/types/dual.ts` - Consolidated type definitions (no `any` usage)
+- `/src/types/index.ts` - Type exports
 
----
+## Environment & Configuration
+- `/src/lib/env.ts` - Environment validation with `getConfig()` and `isDualConfigured()`
 
-## Page Routes (7 files)
+## Core Libraries
+- `/src/lib/wallet.ts` - Wallet utilities (generateMockWallet, shortenAddress, EIP712)
+- `/src/lib/db.ts` - SQLite database layer using better-sqlite3
+- `/src/lib/dual-client.ts` - DUAL Protocol API client (fully typed, no `any`)
+- `/src/lib/action-types.ts` - Action type validation and schemas
+- `/src/lib/template-schema.ts` - Property to DUAL template mapping
 
-### Root & Layout
-- `src/app/page.tsx` - Root redirect to /properties
-- `src/app/layout.tsx` - Root layout (pre-existing)
+## Data Provider Architecture
+- `/src/lib/data-provider.ts` - Abstract DataProvider interface with DemoDataProvider and DualDataProvider implementations
 
-### Dashboard Routes (Route Group)
-- `src/app/(dashboard)/layout.tsx` - Dashboard layout with AppShell
-- `src/app/(dashboard)/properties/page.tsx` - Property listing (1,152 lines)
-- `src/app/(dashboard)/properties/[id]/page.tsx` - Property detail (88 lines)
-- `src/app/(dashboard)/admin/page.tsx` - Admin dashboard (157 lines)
-- `src/app/(dashboard)/admin/mint/page.tsx` - Mint property form (81 lines)
+## Real-time & Caching
+- `/src/lib/realtime.ts` - SSE manager for real-time updates
+- `/src/lib/indexer-cache.ts` - In-memory cache with TTL
+- `/src/lib/webhook-handlers.ts` - Webhook event processing
 
----
+## React Hooks
+- `/src/hooks/useDataProvider.ts` - Data provider access hook
+- `/src/hooks/useActionStatus.ts` - Action status polling hook
 
-## API Routes (4 files)
+## UI Components
+- `/src/components/admin/OrgSelector.tsx` - Organization selector dropdown
+- `/src/components/admin/FaceUploader.tsx` - Face uploader for templates
 
-- `src/app/api/auth/route.ts` - Authentication endpoint (45 lines)
-- `src/app/api/properties/route.ts` - Properties CRUD (70 lines)
-- `src/app/api/webhooks/route.ts` - Webhook receiver (110 lines)
-- `src/app/api/actions/route.ts` - Action execution (85 lines)
+## API Endpoints
 
----
+### Real-time
+- `/src/app/api/sse/route.ts` - Server-Sent Events endpoint
 
-## Components (19 files)
+### Organizations
+- `/src/app/api/organizations/route.ts` - List and create organizations
 
-### Layout Components (3 files)
-- `src/components/layout/AppShell.tsx` - Main app shell
-- `src/components/layout/Header.tsx` - Top navigation header
-- `src/components/layout/Sidebar.tsx` - Navigation sidebar
+### Templates
+- `/src/app/api/templates/route.ts` - List and create templates
+- `/src/app/api/faces/route.ts` - Add faces to templates
 
-### Properties List Components (3 files)
-- `src/components/properties/StatsCards.tsx` - Portfolio stats display
-- `src/components/properties/PropertyFilters.tsx` - Filter and sort controls
-- `src/components/properties/PropertyCard.tsx` - Individual property card
+### Properties
+- `/src/app/api/properties/route.ts` - List and mint properties (uses DataProvider)
+- `/src/app/api/properties/[propertyId]/route.ts` - Get specific property
 
-### Property Detail Components (7 files)
-- `src/components/property-detail/PropertyDetails.tsx` - Full property info
-- `src/components/property-detail/PropertyActions.tsx` - Action buttons
-- `src/components/property-detail/ActivityHistory.tsx` - Event timeline
-- `src/components/property-detail/StatusCard.tsx` - Status display
-- `src/components/property-detail/OwnerCard.tsx` - Owner info
-- `src/components/property-detail/TemplateInfo.tsx` - Template details
-- `src/components/property-detail/FacesCard.tsx` - Attached media
+### Actions
+- `/src/app/api/actions/route.ts` - Create and list actions (validates with action-types)
+- `/src/app/api/actions/[actionId]/route.ts` - Get specific action status
 
-### Admin Components (2 files)
-- `src/components/admin/MintForm.tsx` - Property minting form
-- `src/components/admin/PropertyPreview.tsx` - Live property preview
+### Webhooks
+- `/src/app/api/webhooks/route.ts` - Receive and process webhook events
+- `/src/app/api/webhooks/subscribe/route.ts` - Manage webhook subscriptions
 
-### UI Components (4 files - pre-existing)
-- `src/components/ui/Badge.tsx`
-- `src/components/ui/Button.tsx`
-- `src/components/ui/Card.tsx`
-- `src/components/ui/StatusBadge.tsx`
+### Public Endpoints
+- `/src/app/api/indexer/route.ts` - Public indexer (no auth required)
+- `/src/app/api/auth/route.ts` - Authentication (generates wallet, returns AuthSession)
+- `/src/app/api/stats/route.ts` - Dashboard stats
 
----
+## Configuration Files
+- `/.env.example` - Environment variables template
+- `/package.json.update` - Dependencies to add (better-sqlite3)
 
-## Library & Data (2 files)
+## Architecture Highlights
 
-- `src/lib/demo-data.ts` - Mock data, types, and constants (350 lines)
-  - 8 sample properties with realistic data
-  - 8 action history entries
-  - Property template definition
-  - Portfolio statistics
-  - TypeScript interfaces for all DUAL objects
+### Type Safety
+- All functions have explicit input/output types
+- NO `any` type usage anywhere
+- Proper error types with DualApiError including details
 
----
+### DataProvider Pattern
+- Abstract interface for data access
+- DemoDataProvider: Uses mock data for development
+- DualDataProvider: Uses DUAL API with graceful fallback to demo
+- `getDataProvider()` returns appropriate implementation based on DUAL_CONFIGURED
 
-## File Statistics
+### Graceful Degradation
+- When DUAL API is not configured or unavailable, all endpoints fall back to demo mode
+- Local SQLite database persists data
+- Demo and DUAL providers use same interface
 
-### By Type
-- **TypeScript/React Pages (.tsx):** 26 files
-- **API Routes (.ts):** 4 files
-- **Demo Data (.ts):** 1 file
-- **Total Code Files:** 31 files
+### Real-time Updates
+- SSE endpoint for browser connections
+- WebhookManager broadcasts events to all connected clients
+- Action, property, and webhook events propagated in real-time
 
-### Code Quality
-- **All files have proper TypeScript types**
-- **Production-ready implementations**
-- **Responsive Tailwind CSS styling**
-- **Proper error handling**
-- **Form validation**
-- **Mock data with realistic values**
+### Validation
+- All property data validated before minting
+- All actions validated for availability given property state
+- Webhook signatures verified if DUAL configured
 
----
+## Environment Variables Required for DUAL Mode
 
-## Key Features Implemented
+```
+DUAL_CONFIGURED=true
+DUAL_API_URL=https://api.dual.io
+DUAL_API_KEY=xxx
+DUAL_ORG_ID=xxx
+DUAL_TEMPLATE_ID=xxx
+DUAL_WEBHOOK_SECRET=xxx
+DUAL_WEBHOOK_CALLBACK_URL=http://localhost:3000/api/webhooks
+```
 
-### Properties Listing
-✓ Responsive grid (1/2/3 columns)
-✓ Multiple filter options
-✓ Sorting capabilities
-✓ Status badges
-✓ On-chain status indicators
+Default database: `file:./dev.db` (SQLite)
 
-### Property Details
-✓ Hero section with image
-✓ Two-column layout
-✓ Full property information
-✓ Action buttons (Reserve, Transfer, View On-Chain)
-✓ Activity history timeline
-✓ Owner and template information
+## Next Steps
 
-### Admin Dashboard
-✓ Portfolio statistics
-✓ Recent activity table
-✓ Quick action cards
-✓ On-chain anchoring progress
+1. Install dependencies:
+   ```bash
+   npm install better-sqlite3 @types/better-sqlite3
+   ```
 
-### Property Minting
-✓ Comprehensive form
-✓ All property fields
-✓ Live preview
-✓ Form validation
-✓ Success notifications
+2. Set environment variables in `.env.local`
 
-### API Endpoints
-✓ Authentication (mock JWT)
-✓ Property CRUD operations
-✓ Action execution (async)
-✓ Webhook receiver with event handling
+3. Test endpoints with demo mode first (DUAL_CONFIGURED=false)
 
----
+4. When DUAL API is available, set DUAL_CONFIGURED=true and provide API credentials
 
-## Ready for Integration
-
-All files are production-ready and can be immediately:
-1. Integrated with real DUAL API
-2. Connected to a database (Postgres, MongoDB, etc.)
-3. Enhanced with real blockchain integration
-4. Extended with additional features
-5. Deployed to production
-
-No placeholder code or TODOs - everything is fully implemented.
+5. All API responses follow standard format: `{ success: boolean, data?: T, error?: string }`

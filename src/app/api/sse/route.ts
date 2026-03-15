@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 /**
  * Server-Sent Events (SSE) endpoint for real-time updates
  */
