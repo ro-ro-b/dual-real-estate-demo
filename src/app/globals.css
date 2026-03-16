@@ -57,4 +57,10 @@ body {
   .flex-center {
     @apply flex items-center justify-center;
   }
+  .teal-gradient {
+    background: linear-gradient(135deg, #14b8a7 0%, #10b981 100%);
+  }
+  .dotted-divider {
+    border-top: 2px dashed rgba(0,0,0,0.1);
+  }
 }
