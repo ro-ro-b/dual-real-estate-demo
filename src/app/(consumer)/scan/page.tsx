@@ -175,7 +175,7 @@ const ScanPage = () => {
           {/* Header */}
           <div className="absolute top-0 left-0 right-0 z-20 flex items-center justify-between p-4 bg-gradient-to-b from-slate-950 to-transparent">
             <Link
-              href="/properties"
+              href="/wallet"
               className="text-white hover:text-teal-400 transition-colors"
               aria-label="Close scanner"
             >
@@ -415,7 +415,7 @@ const ScanPage = () => {
             {/* Action Buttons */}
             <div className="space-y-3 pt-4">
               <Link
-                href={`/properties/${scannedProperty.id}`}
+                href={`/wallet/${scannedProperty.id}`}
                 className="block w-full px-6 py-3 bg-gradient-to-r from-teal-500 to-emerald-500 text-white rounded-lg font-semibold text-center hover:from-teal-600 hover:to-emerald-600 transition-all"
               >
                 View Full Property
@@ -427,7 +427,7 @@ const ScanPage = () => {
                 Scan Another Property
               </button>
               <Link
-                href="/properties"
+                href="/wallet"
                 className="block w-full px-6 py-3 bg-slate-100 text-slate-700 rounded-lg font-semibold text-center hover:bg-slate-200 transition-all"
               >
                 Back to Properties

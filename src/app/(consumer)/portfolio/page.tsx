@@ -95,7 +95,7 @@ export default function PortfolioPage() {
             {ownedProperties.map((property) => (
               <Link
                 key={property.id}
-                href={`/properties/${property.id}`}
+                href={`/wallet/${property.id}`}
                 className="block p-4 bg-white rounded-lg shadow hover:shadow-md transition-shadow"
               >
                 <div className="flex items-start gap-4">

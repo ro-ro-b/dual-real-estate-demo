@@ -16,7 +16,7 @@ export default function PropertyDetailPage() {
     return (
       <div className="px-4 pt-6 text-center">
         <p className="text-slate-500">Property not found</p>
-        <Link href="/properties" className="text-teal-500 text-sm mt-4 inline-block">
+        <Link href="/wallet" className="text-teal-500 text-sm mt-4 inline-block">
           Back to Properties
         </Link>
       </div>

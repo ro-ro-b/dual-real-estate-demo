@@ -10,7 +10,7 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { label: 'Properties', icon: 'domain', href: '/properties' },
+  { label: 'Properties', icon: 'domain', href: '/wallet' },
   { label: 'Browse', icon: 'search', href: '/browse' },
   { label: 'SCAN', icon: 'qr_code_scanner', href: '/scan' },
   { label: 'Portfolio', icon: 'analytics', href: '/portfolio' },
@@ -21,9 +21,8 @@ export default function ConsumerNav() {
   const pathname = usePathname();
 
   const isActive = (href: string) => {
-    const normalizedPathname = pathname.split('/').slice(0, 3).join('/') || '/';
-    const normalizedHref = href === '/' ? '/' : `/${href.split('/')[1]}`;
-    return normalizedPathname === normalizedHref;
+    if (href === '/wallet') return pathname === '/wallet' || pathname.startsWith('/wallet/');
+    return pathname.startsWith(href);
   };
 
   return (

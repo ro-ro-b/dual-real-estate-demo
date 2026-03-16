@@ -75,7 +75,7 @@ export default function PropertiesPage() {
           filteredProperties.map((property) => (
             <Link
               key={property.id}
-              href={`/properties/${property.id}`}
+              href={`/wallet/${property.id}`}
               className="block bg-white rounded-lg overflow-hidden shadow hover:shadow-md transition-shadow"
             >
               {/* Image */}
