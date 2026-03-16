@@ -1,271 +1,81 @@
 /**
- * DUAL Protocol API Client
- * Properly typed, no 'any' usage
+ * DUAL SDK Client — Real Estate App
+ * Uses the official @dual/sdk for all DUAL Platform API communication.
+ * Falls back to demo data when DUAL_CONFIGURED is not set.
  */
+import { DualClient, DualConfig, DualError } from './dual-sdk';
 
-import { getConfig } from './env';
-import {
-  Organization,
-  Template,
-  Property,
-  DualObject,
-  Webhook,
-  WebhookEventType,
-  Action,
-  ActionResult,
-} from '@/types';
+export { DualClient, DualConfig, DualError };
 
-export class DualApiError extends Error {
-  constructor(
-    message: string,
-    public statusCode: number,
-    public details: Record<string, unknown> = {}
-  ) {
-    super(message);
-    this.name = 'DualApiError';
-  }
+// Re-export DualError as DualApiError for backward compatibility
+export const DualApiError = DualError;
+
+/** Check if DUAL SDK is configured with real credentials */
+export function isDualConfigured(): boolean {
+  return process.env.NEXT_PUBLIC_DUAL_CONFIGURED === 'true'
+    && !!process.env.DUAL_API_TOKEN;
 }
 
-export class DualClient {
-  private baseUrl: string;
-  private apiKey: string;
-  private orgId: string;
-  private configured: boolean;
+let client: DualClient | null = null;
 
-  constructor() {
-    try {
-      const config = getConfig();
-      this.baseUrl = config.dualApiUrl;
-      this.apiKey = config.dualApiKey;
-      this.orgId = config.dualOrgId;
-      this.configured = config.isDualConfigured;
-    } catch {
-      this.baseUrl = '';
-      this.apiKey = '';
-      this.orgId = '';
-      this.configured = false;
-    }
-  }
-
-  isConfigured(): boolean {
-    return this.configured;
-  }
-
-  private getHeaders(): Record<string, string> {
-    return {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${this.apiKey}`,
-    };
-  }
-
-  private async request<T>(
-    method: string,
-    path: string,
-    body?: Record<string, unknown>
-  ): Promise<T> {
-    if (!this.configured) {
-      throw new DualApiError('DUAL API not configured', 503, { message: 'Set DUAL_CONFIGURED=true' });
-    }
-
-    const url = `${this.baseUrl}${path}`;
-    const options: RequestInit = {
-      method,
-      headers: this.getHeaders(),
-    };
-
-    if (body) {
-      options.body = JSON.stringify(body);
-    }
-
-    const response = await fetch(url, options);
-    const data = (await response.json()) as Record<string, unknown>;
-
-    if (!response.ok) {
-      throw new DualApiError(
-        `DUAL API Error: ${response.statusText}`,
-        response.status,
-        data
-      );
-    }
-
-    return data as T;
-  }
-
-  // Properties
-  async listProperties(filters?: Record<string, unknown>): Promise<DualObject[]> {
-    const queryParams = new URLSearchParams();
-    if (filters) {
-      Object.entries(filters).forEach(([key, value]) => {
-        if (value !== undefined && value !== null) {
-          queryParams.append(key, String(value));
-        }
-      });
-    }
-
-    const path = `/objects?${queryParams.toString()}`;
-    const response = await this.request<{ objects: DualObject[] }>('GET', path);
-    return response.objects;
-  }
-
-  async getProperty(objectId: string): Promise<DualObject> {
-    return this.request<DualObject>('GET', `/objects/${objectId}`);
-  }
-
-  async mintProperty(
-    templateId: string,
-    ownerWallet: string,
-    propertyData: Record<string, unknown>
-  ): Promise<DualObject> {
-    const response = await this.request<DualObject>('POST', '/objects', {
-      templateId,
-      ownerWallet,
-      data: propertyData,
-    });
-    return response;
-  }
-
-  // Templates
-  async getTemplate(templateId: string): Promise<Template> {
-    return this.request<Template>('GET', `/templates/${templateId}`);
-  }
-
-  async listTemplates(): Promise<Template[]> {
-    const response = await this.request<{ templates: Template[] }>('GET', '/templates');
-    return response.templates;
-  }
-
-  async createTemplate(
-    name: string,
-    version: string,
-    schema: Record<string, unknown>
-  ): Promise<Template> {
-    return this.request<Template>('POST', '/templates', {
-      name,
-      version,
-      schema,
-      orgId: this.orgId,
+/** Get or create the singleton DualClient instance */
+export function getDualClient(): DualClient {
+  if (!client) {
+    client = new DualClient({
+      token: process.env.DUAL_API_TOKEN || '',
+      baseUrl: process.env.NEXT_PUBLIC_DUAL_API_URL || 'https://blockv-labs.io',
+      timeout: 30000,
+      retry: { maxAttempts: 3, backoffMs: 1000 },
     });
   }
-
-  // Actions
-  async executeAction(
-    objectId: string,
-    actionType: string,
-    actor: string,
-    parameters: Record<string, unknown>
-  ): Promise<Action> {
-    return this.request<Action>('POST', `/objects/${objectId}/actions`, {
-      actionType,
-      actor,
-      parameters,
-    });
-  }
-
-  async getAction(actionId: string): Promise<Action> {
-    return this.request<Action>('GET', `/actions/${actionId}`);
-  }
-
-  async getPropertyActions(objectId: string): Promise<Action[]> {
-    const response = await this.request<{ actions: Action[] }>('GET', `/objects/${objectId}/actions`);
-    return response.actions;
-  }
-
-  // Organizations
-  async createOrganization(name: string): Promise<Organization> {
-    return this.request<Organization>('POST', '/organizations', { name });
-  }
-
-  async getOrganization(orgId: string): Promise<Organization> {
-    return this.request<Organization>('GET', `/organizations/${orgId}`);
-  }
-
-  async listOrganizations(): Promise<Organization[]> {
-    const response = await this.request<{ organizations: Organization[] }>('GET', '/organizations');
-    return response.organizations;
-  }
-
-  async addOrganizationMember(
-    orgId: string,
-    address: string,
-    role: 'admin' | 'member' | 'viewer'
-  ): Promise<Organization> {
-    return this.request<Organization>('POST', `/organizations/${orgId}/members`, {
-      address,
-      role,
-    });
-  }
-
-  // Webhooks
-  async subscribeWebhook(
-    url: string,
-    events: WebhookEventType[]
-  ): Promise<Webhook> {
-    return this.request<Webhook>('POST', '/webhooks', {
-      url,
-      events,
-      orgId: this.orgId,
-    });
-  }
-
-  async listWebhooks(): Promise<Webhook[]> {
-    const response = await this.request<{ webhooks: Webhook[] }>('GET', '/webhooks');
-    return response.webhooks;
-  }
-
-  async deleteWebhook(webhookId: string): Promise<void> {
-    await this.request<Record<string, unknown>>('DELETE', `/webhooks/${webhookId}`);
-  }
-
-  // Sequencer
-  async getBatch(batchId: string): Promise<Record<string, unknown>> {
-    return this.request<Record<string, unknown>>('GET', `/batches/${batchId}`);
-  }
-
-  async listBatches(): Promise<Record<string, unknown>[]> {
-    const response = await this.request<{ batches: Record<string, unknown>[] }>('GET', '/batches');
-    return response.batches;
-  }
-
-  // Storage
-  async uploadFile(fileData: Buffer, filename: string): Promise<string> {
-    if (!this.configured) {
-      throw new DualApiError('DUAL API not configured', 503);
-    }
-
-    const formData = new FormData();
-    formData.append('file', new Blob([new Uint8Array(fileData)]), filename);
-
-    const response = await fetch(`${this.baseUrl}/storage/upload`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${this.apiKey}`,
-      },
-      body: formData,
-    });
-
-    if (!response.ok) {
-      throw new DualApiError(`Upload failed: ${response.statusText}`, response.status);
-    }
-
-    const data = (await response.json()) as { url?: string };
-    if (!data.url) {
-      throw new DualApiError('No URL returned from upload', 400);
-    }
-
-    return data.url;
-  }
-
-  async getFileUrl(fileId: string): Promise<string> {
-    const response = await this.request<{ url: string }>('GET', `/storage/${fileId}`);
-    return response.url;
-  }
-
-  // EIP-712 Signing (Placeholder)
-  signRequest(_payload: Record<string, unknown>): string {
-    // TODO: Implement EIP-712 signing when web3 provider is available
-    // For now return a placeholder signature
-    return '0x' + 'b'.repeat(130); // 65 bytes (130 hex chars)
-  }
+  return client;
 }
 
-export const dualClient = new DualClient();
+/** Backward-compatible singleton instance */
+export const dualClient = {
+  isConfigured: isDualConfigured,
+  listProperties: async (filters?: Record<string, unknown>) => {
+    const c = getDualClient();
+    const result = await c.objects.listObjects(filters as any);
+    return result?.objects || result?.data || result || [];
+  },
+  getProperty: async (id: string) => {
+    const c = getDualClient();
+    return c.objects.getObject(id);
+  },
+  mintProperty: async (templateId: string, ownerWallet: string, propertyData: Record<string, unknown>) => {
+    const c = getDualClient();
+    return c.ebus.executeAction({ actionType: 'MINT', templateId, ownerWallet, data: propertyData });
+  },
+  getTemplate: async (id: string) => {
+    const c = getDualClient();
+    return c.templates.getTemplate(id);
+  },
+  listTemplates: async () => {
+    const c = getDualClient();
+    const result = await c.templates.listTemplates({ limit: 100 });
+    return result?.templates || result?.data || result || [];
+  },
+  executeAction: async (objectId: string, actionType: string, actor: string, parameters: Record<string, unknown>) => {
+    const c = getDualClient();
+    return c.ebus.executeAction({ objectId, actionType, actor, ...parameters });
+  },
+  getAction: async (id: string) => {
+    const c = getDualClient();
+    return c.ebus.getAction(id);
+  },
+  getPropertyActions: async (objectId: string) => {
+    const c = getDualClient();
+    const result = await c.objects.getObjectActivity(objectId);
+    return result?.actions || result?.data || result || [];
+  },
+  getOrganization: async (id: string) => {
+    const c = getDualClient();
+    return c.organizations.getOrganization(id);
+  },
+  listOrganizations: async () => {
+    const c = getDualClient();
+    const result = await c.organizations.listOrganizations();
+    return result?.organizations || result?.data || result || [];
+  },
+};
