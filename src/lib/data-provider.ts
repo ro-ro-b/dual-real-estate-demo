@@ -366,7 +366,7 @@ export class DualDataProvider implements DataProvider {
 
   async getDashboardStats(): Promise<DashboardStats> {
     try {
-      const properties = await dualClient.listProperties();
+      const properties = (await dualClient.listProperties()) as Property[];
 
       return {
         totalProperties: properties.length,
