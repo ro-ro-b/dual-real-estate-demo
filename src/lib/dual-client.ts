@@ -15,8 +15,7 @@ export const DualApiError = DualError;
 export function isDualConfigured(): boolean {
     return !!(process.env.DUAL_API_KEY || process.env.DUAL_API_TOKEN);
 }
-
-let client: DualClient | null = null;
+let client: DualClient | null = null
 
 /** Get or create the singleton DualClient instance */
 export function getDualClient(): DualClient {
@@ -54,7 +53,7 @@ export const dualClient = {
     },
     mintObject: async (body: Record<string, unknown>) => {
           const c = getDualClient();
-          return c.executeAction({ actionType: 'MINT', ...body });
+                  return c.ebus.executeAction({ actionType: 'MINT', ...body });
     },
     getTemplate: async (id: string) => {
           const c = getDualClient();
