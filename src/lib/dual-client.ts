@@ -37,7 +37,7 @@ export const dualClient = {
     listProperties: async (filters?: Record<string, unknown>) => {
           const c = getDualClient();
           const result = await c.objects.listObjects(filters as any);
-          return result?.objects || result?.data || result || [];
+          return result?.objects || result?.data || [];
     },
     listObjects: async (query: Record<string, unknown>) => {
           const c = getDualClient();
@@ -62,7 +62,7 @@ export const dualClient = {
     listTemplates: async () => {
           const c = getDualClient();
           const result = await c.templates.listTemplates({ limit: 100 });
-          return result?.templates || result?.data || result || [];
+          return result?.templates || result?.data || [];
     },
     createTemplate: async (name: string, version: string, schema: unknown) => {
           const c = getDualClient();
@@ -79,7 +79,7 @@ export const dualClient = {
     getPropertyActions: async (objectId: string) => {
           const c = getDualClient();
           const result = await c.objects.getObjectActivity(objectId);
-          return result?.actions || result?.data || result || [];
+          return result?.actions || result?.data || [];
     },
     getOrganization: async (id: string) => {
           const c = getDualClient();
@@ -88,7 +88,7 @@ export const dualClient = {
     listOrganizations: async () => {
           const c = getDualClient();
           const result = await c.organizations.listOrganizations();
-          return result?.organizations || result?.data || result || [];
+          return result?.organizations || result?.data || [];
     },
     createOrganization: async (name: string) => {
           const c = getDualClient();
@@ -97,7 +97,7 @@ export const dualClient = {
     listWebhooks: async () => {
           const c = getDualClient();
           const result = await c.webhooks.listWebhooks();
-          return result?.webhooks || result?.data || result || [];
+          return result?.webhooks || result?.data || [];
     },
     subscribeWebhook: async (url: string, events: string[]) => {
           const c = getDualClient();
