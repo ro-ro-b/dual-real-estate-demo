@@ -15,7 +15,7 @@ import {
   Template,
 } from '@/types';
 import { dualClient, DualApiError } from './dual-client';
-import { isDualConfigured } from './env';
+import { isDualConfigured } from './env'
 import * as db from './db';
 import { generateMockWallet } from './wallet';
 
@@ -185,7 +185,7 @@ export class DualDataProvider implements DataProvider {
       });
 
       // Convert DualObjects to Properties
-      let properties = objects.map(obj => ({
+      let properties = objects.map((obj: Record<string, unknown>) => ({
         ...obj,
         propertyData: obj.data as any,
       })) as Property[];
