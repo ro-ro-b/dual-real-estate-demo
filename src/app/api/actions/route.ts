@@ -76,11 +76,12 @@ export async function POST(request: NextRequest): Promise<NextResponse<ActionRes
     // Use DUAL API if configured
     if (isDualConfigured()) {
       try {
-        const result = await dualClient.executeAction({
-          objectId: body.objectId,
-          action: body.action,
-          parameters: body.parameters,
-        });
+        const result = await dualClient.executeAction(
+                    body.objectId,
+                    body.action,
+                    '',
+                    body.parameters || {}
+                  );
 
         return NextResponse.json(result, { status: 202 });
       } catch (error) {
