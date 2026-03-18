@@ -4,7 +4,7 @@ import { getDataProvider } from '@/lib/data-provider';
 import { dualClient } from '@/lib/dual-client';
 import { v4 as uuidv4 } from 'uuid';
 
-interface MintPropertyRequest extends Record<string, unknown> {
+interface MintPropertyRequest extends any {
   imageUrl: string;
 }
 

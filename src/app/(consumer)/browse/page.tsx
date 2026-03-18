@@ -1,26 +1,16 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
-// Data loaded from DUAL gateway via API
+import { demoProperties } from '@/lib/demo-data';
 
 type FilterCategory = 'all' | 'residential' | 'commercial' | 'land';
 
 export default function BrowsePage() {
-  const [properties, setProperties] = useState<any[]>([]);
-  const [stats, setStats] = useState<any>(null);
-  
-  useEffect(() => {
-    fetch('/api/properties').then(r => r.json()).then(d => {
-      setProperties(d.properties || d || []);
-    }).catch(() => {});
-    fetch('/api/stats').then(r => r.json()).then(d => setStats(d)).catch(() => {});
-  }, []);
-
   const [filter, setFilter] = useState<FilterCategory>('all');
   const [searchQuery, setSearchQuery] = useState('');
 
-  const filteredProperties = properties.filter((property) => {
+  const filteredProperties = demoProperties.filter((property) => {
     const matchesCategory = filter === 'all';
     const matchesSearch =
       property.propertyData.address.toLowerCase().includes(searchQuery.toLowerCase()) ||

@@ -1,27 +1,17 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
-// Data loaded from DUAL gateway via API
+import { demoProperties } from '@/lib/demo-data';
 
 type FilterStatus = 'all' | 'available' | 'reserved' | 'sold';
 
 export default function PropertiesPage() {
-  const [properties, setProperties] = useState<any[]>([]);
-  const [stats, setStats] = useState<any>(null);
-  
-  useEffect(() => {
-    fetch('/api/properties').then(r => r.json()).then(d => {
-      setProperties(d.properties || d || []);
-    }).catch(() => {});
-    fetch('/api/stats').then(r => r.json()).then(d => setStats(d)).catch(() => {});
-  }, []);
-
   const [filter, setFilter] = useState<FilterStatus>('all');
 
   const demoWallet = '0x742d35Cc6634C0532925a3b844Bc026e6f7D30f0';
 
-  const filteredProperties = properties.filter((property) => {
+  const filteredProperties = demoProperties.filter((property) => {
     if (filter === 'all') return true;
     return property.propertyData.status.toLowerCase() === filter;
   });
