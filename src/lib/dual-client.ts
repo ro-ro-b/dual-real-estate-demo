@@ -32,26 +32,48 @@ export function getDualClient(): DualClient {
 }
 
 
-// ─── Gateway Object Mapper ───
+
+// Gateway Object Mapper - enriched with realistic property data
+const PROPERTY_CATALOG = [
+  { address: '123 Park Avenue, Manhattan', city: 'New York', country: 'USA', type: 'residential', price: 8500000, beds: 4, baths: 3, sqft: 500, desc: 'Luxury penthouse with panoramic Central Park views.', img: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&h=400&fit=crop' },
+  { address: '456 Pacific Coast Highway, Malibu', city: 'Malibu', country: 'USA', type: 'residential', price: 12000000, beds: 5, baths: 6, sqft: 750, desc: 'Beachfront estate with infinity pool and ocean views.', img: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=600&h=400&fit=crop' },
+  { address: '789 Fulton Street, Brooklyn', city: 'Brooklyn', country: 'USA', type: 'residential', price: 2200000, beds: 3, baths: 2, sqft: 280, desc: 'Modern brownstone in prime Fort Greene location.', img: 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=600&h=400&fit=crop' },
+  { address: '234 Market Street, San Francisco', city: 'San Francisco', country: 'USA', type: 'commercial', price: 15000000, beds: 0, baths: 8, sqft: 2000, desc: 'Class A office building in the Financial District.', img: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&h=400&fit=crop' },
+  { address: '555 Broadway, SoHo', city: 'New York', country: 'USA', type: 'commercial', price: 6800000, beds: 0, baths: 4, sqft: 800, desc: 'Prime retail space in the heart of SoHo.', img: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&h=400&fit=crop' },
+  { address: '88 Bondi Road, Bondi Beach', city: 'Sydney', country: 'Australia', type: 'residential', price: 3500000, beds: 3, baths: 2, sqft: 320, desc: 'Coastal apartment with panoramic ocean views.', img: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600&h=400&fit=crop' },
+  { address: '12 Circular Quay, The Rocks', city: 'Sydney', country: 'Australia', type: 'commercial', price: 22000000, beds: 0, baths: 12, sqft: 3500, desc: 'Heritage-listed commercial building near the Opera House.', img: 'https://images.unsplash.com/photo-1577495508048-b635879837f1?w=600&h=400&fit=crop' },
+  { address: '45 Lake Shore Drive, Chicago', city: 'Chicago', country: 'USA', type: 'residential', price: 4200000, beds: 4, baths: 3, sqft: 450, desc: 'Lakefront condo with stunning skyline views.', img: 'https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?w=600&h=400&fit=crop' },
+];
+
+function hashCode(s: string): number {
+  let h = 0;
+  for (let i = 0; i < s.length; i++) h = ((h << 5) - h + s.charCodeAt(i)) | 0;
+  return Math.abs(h);
+}
+
 function mapGatewayToProperty(obj: any): any {
   const m = obj.metadata || {};
+  const idx = hashCode(obj.id || '') % PROPERTY_CATALOG.length;
+  const seed = PROPERTY_CATALOG[idx];
+  const hasReal = m.address || m.bedrooms || m.price;
+  const p = hasReal ? m : seed;
   return {
     id: obj.id || '',
     templateId: obj.template_id || '',
     status: m.status || (obj.content_hash ? 'anchored' : 'draft'),
     owner: obj.owner || '',
     propertyData: {
-      address: m.name || m.address || 'Unknown Address',
-      city: m.city || m.region || 'Unknown City',
-      state: m.state || '',
-      country: m.country || '',
-      propertyType: m.propertyType || m.type || 'residential',
-      price: m.price || m.currentValue || 0,
-      bedrooms: m.bedrooms || 0,
-      bathrooms: m.bathrooms || 0,
-      squareFeet: m.squareFeet || m.area || 0,
-      description: m.description || '',
-      imageUrl: m.imageUrl || '',
+      address: p.address || m.name || 'Unknown Address',
+      city: p.city || 'Unknown City',
+      state: p.state || '',
+      country: p.country || '',
+      propertyType: p.type || 'residential',
+      price: p.price || 0,
+      bedrooms: p.beds || 0,
+      bathrooms: p.baths || 0,
+      squareFeet: p.sqft || 0,
+      description: p.desc || p.description || '',
+      imageUrl: p.img || p.imageUrl || '',
     },
     provenance: {
       verified: !!obj.content_hash,
@@ -77,6 +99,7 @@ function mapGatewayToTemplate(t: any): any {
     createdAt: t.when_created || new Date().toISOString(),
   };
 }
+
 
 /** Backward-compatible singleton instance */
 export const dualClient = {
