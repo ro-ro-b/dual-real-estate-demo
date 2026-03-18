@@ -111,7 +111,7 @@ export const dualClient = {
     },
     listObjects: async (query: Record<string, unknown>) => {
           const c = getDualClient();
-          return c.objects.listObjects(query);
+          return c.objects.listObjects({ ...query, template_id: process.env.DUAL_TEMPLATE_ID || undefined });
     },
     getProperty: async (id: string) => {
           const c = getDualClient();
