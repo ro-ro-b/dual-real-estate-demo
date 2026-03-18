@@ -1,5 +1,5 @@
 /**
- * DUAL SDK Client — Real Estate App
+ * DUAL SDK Client â Real Estate App
  * Uses the official @dual/sdk for all DUAL Platform API communication.
  * Falls back to demo data when DUAL_CONFIGURED is not set.
  */
@@ -31,13 +31,60 @@ export function getDualClient(): DualClient {
     return client;
 }
 
+
+// ─── Gateway Object Mapper ───
+function mapGatewayToProperty(obj: any): any {
+  const m = obj.metadata || {};
+  return {
+    id: obj.id || '',
+    templateId: obj.template_id || '',
+    status: m.status || (obj.content_hash ? 'anchored' : 'draft'),
+    owner: obj.owner || '',
+    propertyData: {
+      address: m.name || m.address || 'Unknown Address',
+      city: m.city || m.region || 'Unknown City',
+      state: m.state || '',
+      country: m.country || '',
+      propertyType: m.propertyType || m.type || 'residential',
+      price: m.price || m.currentValue || 0,
+      bedrooms: m.bedrooms || 0,
+      bathrooms: m.bathrooms || 0,
+      squareFeet: m.squareFeet || m.area || 0,
+      description: m.description || '',
+      imageUrl: m.imageUrl || '',
+    },
+    provenance: {
+      verified: !!obj.content_hash,
+      txHash: obj.content_hash || '',
+      chain: 'Ethereum Sepolia',
+      confirmations: obj.content_hash ? 10 : 0,
+    },
+    actions: [],
+    createdAt: obj.when_created || new Date().toISOString(),
+    updatedAt: obj.when_modified || new Date().toISOString(),
+  };
+}
+
+function mapGatewayToTemplate(t: any): any {
+  const m = t.object?.metadata || t.metadata || {};
+  return {
+    id: t.id || '',
+    name: t.name || m.name || 'Untitled Template',
+    description: m.description || '',
+    version: t.version || '1.0',
+    schema: t.object || {},
+    organizationId: t.org_id || '',
+    createdAt: t.when_created || new Date().toISOString(),
+  };
+}
+
 /** Backward-compatible singleton instance */
 export const dualClient = {
     isConfigured: isDualConfigured,
     listProperties: async (filters?: Record<string, unknown>) => {
           const c = getDualClient();
           const result = await c.objects.listObjects(filters as any);
-          return result?.objects || result?.data || [];
+          return (result?.objects || result?.data || []).map((obj: any) => mapGatewayToProperty(obj));
     },
     listObjects: async (query: Record<string, unknown>) => {
           const c = getDualClient();
@@ -62,7 +109,7 @@ export const dualClient = {
     listTemplates: async () => {
           const c = getDualClient();
           const result = await c.templates.listTemplates({ limit: 100 });
-          return result?.templates || result?.data || [];
+          return (result?.templates || result?.data || []).map((t: any) => mapGatewayToTemplate(t));
     },
     createTemplate: async (name: string, version: string, schema: unknown) => {
           const c = getDualClient();
@@ -79,7 +126,7 @@ export const dualClient = {
     getPropertyActions: async (objectId: string) => {
           const c = getDualClient();
           const result = await c.objects.getObjectActivity(objectId);
-          return result?.actions || result?.data || [];
+          return (result?.actions || result?.data || []).map((a: any) => ({ id: a.id, type: a.action_type || a.type, objectId: a.object_id, status: a.status || 'completed', actor: a.initiator || a.owner, timestamp: a.when_created, description: a.description || '' }));
     },
     getOrganization: async (id: string) => {
           const c = getDualClient();
@@ -88,7 +135,7 @@ export const dualClient = {
     listOrganizations: async () => {
           const c = getDualClient();
           const result = await c.organizations.listOrganizations();
-          return result?.organizations || result?.data || [];
+          return (result?.organizations || result?.data || []).map((o: any) => ({ id: o.id, name: o.name || o.fqdn, description: o.description || '', members: o.members || [], createdAt: o.when_created }));
     },
     createOrganization: async (name: string) => {
           const c = getDualClient();
