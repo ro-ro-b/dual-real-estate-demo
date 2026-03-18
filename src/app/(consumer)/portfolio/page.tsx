@@ -1,12 +1,23 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { demoProperties, demoStats } from '@/lib/demo-data';
+// Data loaded from DUAL gateway via API
 
 export default function PortfolioPage() {
+  const [properties, setProperties] = useState<any[]>([]);
+  const [stats, setStats] = useState<any>(null);
+  
+  useEffect(() => {
+    fetch('/api/properties').then(r => r.json()).then(d => {
+      setProperties(d.properties || d || []);
+    }).catch(() => {});
+    fetch('/api/stats').then(r => r.json()).then(d => setStats(d)).catch(() => {});
+  }, []);
+
   const demoWallet = '0x742d35Cc6634C0532925a3b844Bc026e6f7D30f0';
 
-  const ownedProperties = demoProperties.filter(
+  const ownedProperties = properties.filter(
     (property) => property.ownerWallet === demoWallet
   );
 

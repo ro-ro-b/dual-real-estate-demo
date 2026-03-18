@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { demoProperties, PropertyData } from '@/lib/demo-data';
+import { getDataProvider } from '@/lib/data-provider';
+import type { PropertyData } from '@/lib/demo-data';
 import { dualClient } from '@/lib/dual-client';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -62,7 +63,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Demo data fallback
-    let filtered = [...demoProperties];
+    let filtered = [...(await getDataProvider().listProperties({} as any)).properties];
 
     // Filter by status
     if (status && status !== 'all') {
