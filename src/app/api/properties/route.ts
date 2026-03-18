@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getDataProvider } from '@/lib/data-provider';
-import type { PropertyData } from '@/lib/demo-data';
+// PropertyData type not needed — using any for gateway data
 import { dualClient } from '@/lib/dual-client';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -41,7 +41,7 @@ export async function GET(request: NextRequest) {
 
         // Apply filters
         if (status && status !== 'all') {
-          properties = properties.filter((p: any) => p.status === status);
+          properties = properties.filter((p: any) => p?.status === status);
         }
         if (minPrice) {
           const min = parseFloat(minPrice);
@@ -67,7 +67,7 @@ export async function GET(request: NextRequest) {
 
     // Filter by status
     if (status && status !== 'all') {
-      filtered = filtered.filter((p) => p.propertyData.status === status);
+      filtered = filtered.filter((p) => p.propertyData?.status === status);
     }
 
     // Filter by price range
@@ -125,7 +125,7 @@ export async function POST(request: NextRequest) {
             country: body.country,
             description: body.description,
             price: body.price,
-            status: body.status,
+            status: body?.status,
             imageUrl: body.imageUrl,
           },
         });
