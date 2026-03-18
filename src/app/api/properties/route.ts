@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getDataProvider } from '@/lib/data-provider';
-// PropertyData type not needed — using any for gateway data
+// any type not needed — using any for gateway data
 import { dualClient } from '@/lib/dual-client';
 import { v4 as uuidv4 } from 'uuid';
 
-interface MintPropertyRequest extends PropertyData {
+interface MintPropertyRequest extends any {
   imageUrl: string;
 }
 
