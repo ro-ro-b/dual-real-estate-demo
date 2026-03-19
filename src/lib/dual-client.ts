@@ -100,7 +100,8 @@ export const dualClient = {
     isConfigured: isDualConfigured,
     listProperties: async (filters?: Record<string, unknown>) => {
           const c = getDualClient();
-          const result = await c.objects.listObjects(filters as any);
+          const query = { template_id: process.env.DUAL_TEMPLATE_ID || undefined, ...filters };
+          const result = await c.objects.listObjects(query as any);
           return (result?.objects || result?.data || []).map((obj: any) => mapGatewayToProperty(obj));
     },
     listObjects: async (query: Record<string, unknown>) => {
