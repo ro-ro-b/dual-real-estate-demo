@@ -238,6 +238,57 @@ export default function PropertyDetailPage({
               </div>
             </div>
 
+            {/* Blockchain Verification Card */}
+            {property.explorerLinks && (
+              <div className="bg-white border border-[#14b8a7]/10 rounded-xl p-5 shadow-sm">
+                <p className="text-slate-500 text-xs uppercase font-bold tracking-wider mb-4">Blockchain Verification</p>
+                <div className="space-y-3">
+                  {property.explorerLinks.owner && (
+                    <a
+                      href={property.explorerLinks.owner}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 p-2 rounded-lg hover:bg-[#14b8a7]/5 transition-colors"
+                    >
+                      <span className="inline-block w-2 h-2 bg-green-400 rounded-full shrink-0"></span>
+                      <span className="text-xs text-blue-500 hover:text-blue-700 font-medium">View Owner</span>
+                      <span className="material-symbols-outlined text-sm text-slate-400 ml-auto">open_in_new</span>
+                    </a>
+                  )}
+                  {property.explorerLinks.contentHash && (
+                    <div className="space-y-1">
+                      <a
+                        href={property.explorerLinks.contentHash}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 p-2 rounded-lg hover:bg-[#14b8a7]/5 transition-colors"
+                      >
+                        <span className="inline-block w-2 h-2 bg-green-400 rounded-full shrink-0"></span>
+                        <span className="text-xs text-blue-500 hover:text-blue-700 font-medium">Content Hash</span>
+                        <span className="material-symbols-outlined text-sm text-slate-400 ml-auto">open_in_new</span>
+                      </a>
+                      <p className="text-[11px] text-slate-500 font-mono ml-4 break-all">{property.contentHash}</p>
+                    </div>
+                  )}
+                  {property.explorerLinks.integrityHash && (
+                    <div className="space-y-1">
+                      <a
+                        href={property.explorerLinks.integrityHash}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 p-2 rounded-lg hover:bg-[#14b8a7]/5 transition-colors"
+                      >
+                        <span className="inline-block w-2 h-2 bg-green-400 rounded-full shrink-0"></span>
+                        <span className="text-xs text-blue-500 hover:text-blue-700 font-medium">Integrity Hash</span>
+                        <span className="material-symbols-outlined text-sm text-slate-400 ml-auto">open_in_new</span>
+                      </a>
+                      <p className="text-[11px] text-slate-500 font-mono ml-4 break-all">{property.integrityHash}</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
             {/* Faces Card */}
             {faces.length > 0 && (
               <div className="bg-white border border-[#14b8a7]/10 rounded-xl p-5 shadow-sm">

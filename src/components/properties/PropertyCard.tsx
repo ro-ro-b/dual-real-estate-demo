@@ -77,6 +77,48 @@ export function PropertyCard({ property }: PropertyCardProps) {
               <span>{propertyData.squareMeters} sqm</span>
             </div>
           </div>
+
+          {/* Blockchain Verification */}
+          {property.explorerLinks && (
+            <div className="mt-2 pt-2 border-t border-gray-200 flex flex-wrap gap-2">
+              {property.explorerLinks.owner && (
+                <a
+                  href={property.explorerLinks.owner}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e: any) => e.stopPropagation()}
+                  className="text-xs text-blue-500 hover:text-blue-700 flex items-center gap-1"
+                >
+                  <span className="inline-block w-2 h-2 bg-green-400 rounded-full"></span>
+                  Owner
+                </a>
+              )}
+              {property.explorerLinks.contentHash && (
+                <a
+                  href={property.explorerLinks.contentHash}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e: any) => e.stopPropagation()}
+                  className="text-xs text-blue-500 hover:text-blue-700 flex items-center gap-1"
+                >
+                  <span className="inline-block w-2 h-2 bg-green-400 rounded-full"></span>
+                  Content Hash
+                </a>
+              )}
+              {property.explorerLinks.integrityHash && (
+                <a
+                  href={property.explorerLinks.integrityHash}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e: any) => e.stopPropagation()}
+                  className="text-xs text-blue-500 hover:text-blue-700 flex items-center gap-1"
+                >
+                  <span className="inline-block w-2 h-2 bg-green-400 rounded-full"></span>
+                  Integrity
+                </a>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </Link>

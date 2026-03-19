@@ -65,6 +65,14 @@ export interface PropertyData {
   imageUrl: string;
 }
 
+// Explorer Links Type
+export interface ExplorerLinks {
+  owner: string | null;
+  contentHash: string | null;
+  integrityHash: string | null;
+  org: string | null;
+}
+
 // DUAL Object Type
 export interface DualObject {
   id: string;
@@ -79,6 +87,7 @@ export interface DualObject {
   createdAt: string;
   updatedAt: string;
   faces: Face[];
+  explorerLinks?: ExplorerLinks;
 }
 
 // Property Type
