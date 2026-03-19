@@ -84,7 +84,7 @@ export default function AdminPage() {
             </div>
             <div className="flex items-end justify-between">
               <p className="text-3xl font-bold text-slate-900">{card.value}</p>
-              <p className={`${card.up ? 'text-emerald-500' : 'text-rose-500'} text-xs font-bold flex items-center mb-1`}>
+              <p className={`${card.up ? 'text-gold-600' : 'text-rose-500'} text-xs font-bold flex items-center mb-1`}>
                 <span className="material-symbols-outlined text-xs">{card.up ? 'arrow_upward' : 'arrow_downward'}</span>
                 {card.trend}
               </p>

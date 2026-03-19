@@ -39,7 +39,7 @@ export default function ConsumerNav() {
                 href={item.href}
                 className="flex flex-col items-center justify-center -mt-8 mb-2"
               >
-                <div className="w-14 h-14 rounded-full bg-gradient-to-br from-teal-400 to-emerald-500 flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow">
+                <div className="w-14 h-14 rounded-full wine-gradient flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow">
                   <span className="material-symbols-outlined text-white text-2xl">
                     {item.icon}
                   </span>
@@ -59,14 +59,14 @@ export default function ConsumerNav() {
             >
               <span
                 className={`material-symbols-outlined text-xl transition-colors ${
-                  isItemActive ? 'text-teal-500' : 'text-slate-400'
+                  isItemActive ? 'text-primary-consumer' : 'text-slate-400'
                 }`}
               >
                 {item.icon}
               </span>
               <span
                 className={`text-xs mt-1 font-medium transition-colors ${
-                  isItemActive ? 'text-teal-500' : 'text-slate-500'
+                  isItemActive ? 'text-primary-consumer' : 'text-slate-500'
                 }`}
               >
                 {item.label}

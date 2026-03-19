@@ -27,36 +27,35 @@ export function PropertyCard({ property }: PropertyCardProps) {
   return (
     <Link href={`/properties/${id}`}>
       <div className="group h-full cursor-pointer">
-        {/* Premium Token Card with glass-morphism */}
-        <div className="h-full bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl border border-slate-700/50 overflow-hidden shadow-2xl hover:shadow-emerald-500/20 hover:border-emerald-500/30 transition-all duration-300 backdrop-blur-xl flex flex-col">
+        <div className="h-full bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-sm hover:shadow-lg hover:border-gold-200 transition-all duration-300 flex flex-col">
           {/* Token Image Header */}
-          <div className="relative aspect-[16/10] overflow-hidden bg-slate-950">
+          <div className="relative aspect-[16/10] overflow-hidden bg-wine-50">
             <img
               src={imageUrl}
               alt={propertyData.address}
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent" />
 
             {/* Token ID Badge */}
             <div className="absolute top-4 right-4">
-              <div className="px-3 py-1.5 bg-indigo-600/90 backdrop-blur-md border border-indigo-400/50 rounded-lg font-mono text-xs font-bold text-indigo-100 tracking-wider">
+              <div className="px-3 py-1.5 bg-white/90 backdrop-blur-md border border-slate-200 rounded-lg font-mono text-xs font-bold text-slate-700 tracking-wider">
                 #{truncateHash(id, 5)}
               </div>
             </div>
 
-            {/* Anchored Status Badge with Glow */}
+            {/* Anchored Status Badge */}
             {onChainStatus === 'anchored' && (
               <div className="absolute top-4 left-4">
-                <div className="px-3 py-1.5 bg-emerald-600/90 backdrop-blur-md border border-emerald-400/50 rounded-lg flex items-center gap-1.5 font-mono text-xs font-bold text-emerald-100 animate-pulse shadow-lg shadow-emerald-500/50">
-                  <span className="w-2 h-2 bg-emerald-300 rounded-full animate-pulse"></span>
+                <div className="px-3 py-1.5 bg-gold-50/90 backdrop-blur-md border border-gold-200 rounded-lg flex items-center gap-1.5 font-mono text-xs font-bold text-gold-800">
+                  <span className="w-2 h-2 bg-gold-500 rounded-full animate-pulse"></span>
                   ANCHORED
                 </div>
               </div>
             )}
             {onChainStatus === 'pending' && (
               <div className="absolute top-4 left-4">
-                <div className="px-3 py-1.5 bg-amber-600/90 backdrop-blur-md border border-amber-400/50 rounded-lg flex items-center gap-1.5 font-mono text-xs font-bold text-amber-100 animate-pulse">
+                <div className="px-3 py-1.5 bg-amber-50/90 backdrop-blur-md border border-amber-200 rounded-lg flex items-center gap-1.5 font-mono text-xs font-bold text-amber-700 animate-pulse">
                   <span className="material-symbols-outlined text-xs">hourglass_empty</span>
                   PENDING
                 </div>
@@ -66,19 +65,18 @@ export function PropertyCard({ property }: PropertyCardProps) {
 
           {/* Token Info Section */}
           <div className="flex-1 p-5 flex flex-col justify-between">
-            {/* Template Name */}
             <div>
               <p className="text-xs font-mono uppercase tracking-widest text-slate-400 mb-2">
                 {templateName || 'Property Token'}
               </p>
-              <h3 className="text-lg font-bold text-slate-100 mb-3 line-clamp-2">{propertyData.address}</h3>
+              <h3 className="text-lg font-bold text-slate-900 mb-3 line-clamp-2">{propertyData.address}</h3>
 
               {/* Content Hash Preview */}
               {property.contentHash && (
                 <div className="mb-4">
-                  <p className="text-xs font-mono text-slate-500 mb-1">Content Hash</p>
-                  <div className="bg-slate-950/50 border border-slate-700/50 rounded-lg px-2.5 py-1.5">
-                    <code className="text-[11px] font-mono text-emerald-400">
+                  <p className="text-xs font-mono text-slate-400 mb-1">Content Hash</p>
+                  <div className="bg-slate-50 border border-slate-100 rounded-lg px-2.5 py-1.5">
+                    <code className="text-[11px] font-mono text-primary-consumer">
                       {truncateHash(property.contentHash, 14)}
                     </code>
                   </div>
@@ -87,16 +85,16 @@ export function PropertyCard({ property }: PropertyCardProps) {
             </div>
 
             {/* Owner & Created Date */}
-            <div className="space-y-3 border-t border-slate-700/50 pt-4">
+            <div className="space-y-3 border-t border-slate-100 pt-4">
               {property.ownerWallet && (
                 <div className="flex items-center justify-between">
-                  <p className="text-xs font-mono uppercase tracking-widest text-slate-500">Owner</p>
+                  <p className="text-xs font-mono uppercase tracking-widest text-slate-400">Owner</p>
                   <a
                     href={property.explorerLinks?.owner || '#'}
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e: any) => e.stopPropagation()}
-                    className="text-xs font-mono text-cyan-400 hover:text-cyan-300 transition-colors truncate max-w-[120px]"
+                    className="text-xs font-mono text-primary-consumer hover:text-wine-700 transition-colors truncate max-w-[120px]"
                   >
                     {property.ownerWallet.substring(0, 6)}...{property.ownerWallet.substring(property.ownerWallet.length - 4)}
                   </a>
@@ -104,8 +102,8 @@ export function PropertyCard({ property }: PropertyCardProps) {
               )}
 
               <div className="flex items-center justify-between">
-                <p className="text-xs font-mono uppercase tracking-widest text-slate-500">Created</p>
-                <p className="text-xs text-slate-400">{formatDate(property.createdAt)}</p>
+                <p className="text-xs font-mono uppercase tracking-widest text-slate-400">Created</p>
+                <p className="text-xs text-slate-500">{formatDate(property.createdAt)}</p>
               </div>
 
               {/* View on Chain Button */}
@@ -115,7 +113,7 @@ export function PropertyCard({ property }: PropertyCardProps) {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={(e: any) => e.stopPropagation()}
-                  className="mt-4 w-full inline-flex items-center justify-center gap-2 px-4 py-2 bg-emerald-600/20 hover:bg-emerald-600/40 border border-emerald-500/50 hover:border-emerald-400 rounded-lg text-xs font-bold text-emerald-300 hover:text-emerald-100 transition-all duration-200"
+                  className="mt-4 w-full inline-flex items-center justify-center gap-2 px-4 py-2 bg-gold-50 hover:bg-gold-100 border border-gold-200 hover:border-gold-300 rounded-lg text-xs font-bold text-gold-800 hover:text-gold-900 transition-all duration-200"
                 >
                   <span className="material-symbols-outlined text-sm">open_in_new</span>
                   View on Chain

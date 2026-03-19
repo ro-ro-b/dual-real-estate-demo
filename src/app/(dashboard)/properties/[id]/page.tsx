@@ -56,7 +56,7 @@ export default function PropertyDetailPage({
   const imageUrl = faces.length > 0 ? faces[0].url : 'https://dual-docs-gray.vercel.app/assets/products/property-token.svg';
 
   const statusConfig: Record<string, { bg: string; textColor: string; label: string }> = {
-    available: { bg: 'bg-emerald-950', textColor: 'text-emerald-300', label: 'Available' },
+    available: { bg: 'bg-gold-50', textColor: 'text-gold-800', label: 'Available' },
     reserved: { bg: 'bg-amber-950', textColor: 'text-amber-300', label: 'Reserved' },
     sold: { bg: 'bg-red-950', textColor: 'text-red-300', label: 'Sold' },
   };

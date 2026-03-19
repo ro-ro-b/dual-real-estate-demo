@@ -18,12 +18,12 @@ export function StatsCards(props: { stats: StatsProps }) {
       value: String(stats.totalProperties),
       trend: '+2 from last month',
       trendIcon: 'trending_up',
-      trendColor: 'text-[#14b8a7]',
+      trendColor: 'text-primary-consumer',
     },
     {
       title: 'Available',
       value: String(stats.available),
-      valueColor: 'text-[#14b8a7]',
+      valueColor: 'text-primary-consumer',
       subtitle: 'Ready for acquisition',
     },
     {

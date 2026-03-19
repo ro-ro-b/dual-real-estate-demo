@@ -34,7 +34,7 @@ export default function AdminPropertiesPage() {
   const getStatusColor = (status: 'available' | 'reserved' | 'sold') => {
     switch (status) {
       case 'available':
-        return 'bg-emerald-100 text-emerald-700';
+        return 'bg-gold-100 text-gold-800';
       case 'reserved':
         return 'bg-amber-100 text-amber-700';
       case 'sold':

@@ -31,7 +31,7 @@ export function PropertyFilters({
           <select
             value={statusFilter}
             onChange={(e) => onStatusChange(e.target.value as StatusFilter)}
-            className="appearance-none px-4 py-2 pr-10 bg-white border border-slate-200 rounded-lg text-sm font-medium hover:bg-slate-50 cursor-pointer focus:ring-2 focus:ring-[#14b8a7]/20 focus:border-[#14b8a7]"
+            className="appearance-none px-4 py-2 pr-10 bg-white border border-slate-200 rounded-lg text-sm font-medium hover:bg-slate-50 cursor-pointer focus:ring-2 focus:ring-primary-consumer/20 focus:border-primary-consumer"
           >
             <option value="all">Status</option>
             <option value="available">Available</option>
@@ -47,7 +47,7 @@ export function PropertyFilters({
             onChange={(e) =>
               onBedroomsChange(e.target.value === 'all' ? 'all' : parseInt(e.target.value))
             }
-            className="appearance-none px-4 py-2 pr-10 bg-white border border-slate-200 rounded-lg text-sm font-medium hover:bg-slate-50 cursor-pointer focus:ring-2 focus:ring-[#14b8a7]/20 focus:border-[#14b8a7]"
+            className="appearance-none px-4 py-2 pr-10 bg-white border border-slate-200 rounded-lg text-sm font-medium hover:bg-slate-50 cursor-pointer focus:ring-2 focus:ring-primary-consumer/20 focus:border-primary-consumer"
           >
             <option value="all">Bedrooms</option>
             <option value="2">2+</option>
@@ -68,7 +68,7 @@ export function PropertyFilters({
               else if (val === '5m-10m') onPriceRangeChange([5000000, 10000000]);
               else if (val === 'over10m') onPriceRangeChange([10000000, 25000000]);
             }}
-            className="appearance-none px-4 py-2 pr-10 bg-white border border-slate-200 rounded-lg text-sm font-medium hover:bg-slate-50 cursor-pointer focus:ring-2 focus:ring-[#14b8a7]/20 focus:border-[#14b8a7]"
+            className="appearance-none px-4 py-2 pr-10 bg-white border border-slate-200 rounded-lg text-sm font-medium hover:bg-slate-50 cursor-pointer focus:ring-2 focus:ring-primary-consumer/20 focus:border-primary-consumer"
           >
             <option value="all">Price Range</option>
             <option value="under2m">Under $2M</option>
@@ -86,7 +86,7 @@ export function PropertyFilters({
           <select
             value={sortBy}
             onChange={(e) => onSortChange(e.target.value as SortOption)}
-            className="appearance-none px-4 py-2 pr-10 bg-white border border-slate-200 rounded-lg text-sm font-medium hover:bg-slate-50 cursor-pointer focus:ring-2 focus:ring-[#14b8a7]/20 focus:border-[#14b8a7]"
+            className="appearance-none px-4 py-2 pr-10 bg-white border border-slate-200 rounded-lg text-sm font-medium hover:bg-slate-50 cursor-pointer focus:ring-2 focus:ring-primary-consumer/20 focus:border-primary-consumer"
           >
             <option value="newest">Newest</option>
             <option value="oldest">Oldest</option>
