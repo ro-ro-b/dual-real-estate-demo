@@ -191,7 +191,7 @@ const ScanPage = () => {
           <div className="absolute top-0 left-0 right-0 z-20 flex items-center justify-between p-4 bg-gradient-to-b from-slate-950 to-transparent">
             <Link
               href="/wallet"
-              className="text-white hover:text-teal-400 transition-colors"
+              className="text-white hover:text-wine-400 transition-colors"
               aria-label="Close scanner"
             >
               <span className="material-symbols-outlined text-2xl">close</span>
@@ -209,7 +209,7 @@ const ScanPage = () => {
                   <p className="text-white text-lg mb-4">{cameraError}</p>
                   <button
                     onClick={handleRetry}
-                    className="px-6 py-2 bg-gradient-to-r from-teal-500 to-emerald-500 text-white rounded-lg font-medium hover:from-teal-600 hover:to-emerald-600 transition-all"
+                    className="px-6 py-2 wine-gradient text-white rounded-lg font-medium hover:opacity-90 transition-opacity"
                   >
                     Retry
                   </button>
@@ -226,7 +226,7 @@ const ScanPage = () => {
               className="w-64 h-64"
               viewBox="0 0 256 256"
               fill="none"
-              stroke="#14b8a7"
+              stroke="#791b3a"
               strokeWidth="3"
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -244,7 +244,7 @@ const ScanPage = () => {
             {/* Animated scanning line */}
             <div className="absolute inset-0 flex items-center justify-center">
               <div
-                className="w-64 h-1 bg-gradient-to-r from-transparent via-teal-400 to-transparent animate-pulse"
+                className="w-64 h-1 bg-gradient-to-r from-transparent via-wine-400 to-transparent animate-pulse"
                 style={{
                   animation: 'scanLine 2s ease-in-out infinite',
                 }}
@@ -254,10 +254,10 @@ const ScanPage = () => {
 
           {/* Bottom Instructions */}
           <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950 to-transparent p-6 z-20">
-            <p className="text-center text-teal-300 mb-6">Point camera at property title deed QR code</p>
+            <p className="text-center text-wine-300 mb-6">Point camera at property title deed QR code</p>
             <button
               onClick={handleDemoScan}
-              className="w-full px-6 py-3 bg-gradient-to-r from-teal-500 to-emerald-500 text-white rounded-lg font-semibold hover:from-teal-600 hover:to-emerald-600 transition-all"
+              className="w-full px-6 py-3 wine-gradient text-white rounded-lg font-semibold hover:opacity-90 transition-opacity"
             >
               Demo: Simulate Scan
             </button>
@@ -281,14 +281,14 @@ const ScanPage = () => {
       )}
 
       {state === 'verifying' && (
-        <div className="h-full w-full bg-slate-100 flex items-center justify-center px-4">
+        <div className="h-full w-full bg-background-light flex items-center justify-center px-4">
           <div className="text-center">
             {/* Verification animation */}
             <div className="relative w-24 h-24 mx-auto mb-8">
-              <div className="absolute inset-0 rounded-full border-4 border-teal-400 animate-spin" />
-              <div className="absolute inset-2 rounded-full border-4 border-transparent border-t-emerald-500 animate-spin" style={{ animationDirection: 'reverse' }} />
+              <div className="absolute inset-0 rounded-full border-4 border-wine-400 animate-spin" />
+              <div className="absolute inset-2 rounded-full border-4 border-transparent border-t-gold-500 animate-spin" style={{ animationDirection: 'reverse' }} />
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="material-symbols-outlined text-4xl text-teal-600">real_estate_agent</span>
+                <span className="material-symbols-outlined text-4xl text-wine-600">real_estate_agent</span>
               </div>
             </div>
 
@@ -301,10 +301,10 @@ const ScanPage = () => {
                 <div key={index} className="flex items-center gap-3 text-left">
                   <div className="flex-shrink-0">
                     {step.status === 'done' && (
-                      <span className="material-symbols-outlined text-xl text-emerald-500">check_circle</span>
+                      <span className="material-symbols-outlined text-xl text-gold-600">check_circle</span>
                     )}
                     {step.status === 'active' && (
-                      <span className="material-symbols-outlined text-xl text-teal-500 animate-spin">
+                      <span className="material-symbols-outlined text-xl text-wine-600 animate-spin">
                         progress_activity
                       </span>
                     )}
@@ -317,7 +317,7 @@ const ScanPage = () => {
                       step.status === 'done'
                         ? 'text-slate-700'
                         : step.status === 'active'
-                          ? 'text-teal-600'
+                          ? 'text-wine-600'
                           : 'text-slate-500'
                     }`}
                   >
@@ -331,12 +331,12 @@ const ScanPage = () => {
       )}
 
       {state === 'result' && scannedProperty && (
-        <div className="h-full w-full bg-white overflow-y-auto">
+        <div className="h-full w-full bg-background-light overflow-y-auto">
           {/* Status Banner */}
           <div
             className={`px-6 py-4 flex items-center gap-3 ${
               resultStatus === 'verified'
-                ? 'bg-emerald-50 border-b-2 border-emerald-400'
+                ? 'bg-gold-50 border-b-2 border-gold-400'
                 : resultStatus === 'unverified'
                   ? 'bg-red-50 border-b-2 border-red-400'
                   : 'bg-amber-50 border-b-2 border-amber-400'
@@ -344,8 +344,8 @@ const ScanPage = () => {
           >
             {resultStatus === 'verified' && (
               <>
-                <span className="material-symbols-outlined text-emerald-600">verified</span>
-                <span className="font-semibold text-emerald-900">VERIFIED</span>
+                <span className="material-symbols-outlined text-gold-700">verified</span>
+                <span className="font-semibold text-gold-900">VERIFIED</span>
               </>
             )}
             {resultStatus === 'unverified' && (
@@ -368,7 +368,7 @@ const ScanPage = () => {
               <img
                 src={scannedProperty.faces[0].url}
                 alt={scannedProperty.propertyData.address}
-                className="w-full h-64 object-cover rounded-lg"
+                className="w-full h-64 object-cover rounded-2xl"
               />
             )}
 
@@ -376,33 +376,33 @@ const ScanPage = () => {
             <div>
               <h2 className="text-2xl font-bold text-slate-900 mb-1">{scannedProperty.propertyData.address}</h2>
               <p className="text-slate-600">{scannedProperty.propertyData.city}, {scannedProperty.propertyData.country}</p>
-              <p className="text-2xl font-bold text-teal-600 mt-2">{formatCurrency(scannedProperty.propertyData.price)}</p>
+              <p className="text-2xl font-bold text-primary-consumer mt-2">{formatCurrency(scannedProperty.propertyData.price)}</p>
             </div>
 
             {/* Specs Grid */}
             <div className="grid grid-cols-3 gap-4">
-              <div className="bg-slate-50 p-4 rounded-lg text-center">
-                <p className="text-2xl font-bold text-teal-600">{scannedProperty.propertyData.bedrooms}</p>
+              <div className="bg-white p-4 rounded-2xl text-center border border-slate-100 shadow-sm">
+                <p className="text-2xl font-bold text-primary-consumer">{scannedProperty.propertyData.bedrooms}</p>
                 <p className="text-sm text-slate-600 mt-1">Bedrooms</p>
               </div>
-              <div className="bg-slate-50 p-4 rounded-lg text-center">
-                <p className="text-2xl font-bold text-teal-600">{scannedProperty.propertyData.bathrooms}</p>
+              <div className="bg-white p-4 rounded-2xl text-center border border-slate-100 shadow-sm">
+                <p className="text-2xl font-bold text-primary-consumer">{scannedProperty.propertyData.bathrooms}</p>
                 <p className="text-sm text-slate-600 mt-1">Bathrooms</p>
               </div>
-              <div className="bg-slate-50 p-4 rounded-lg text-center">
-                <p className="text-2xl font-bold text-teal-600">{scannedProperty.propertyData.squareMeters}</p>
+              <div className="bg-white p-4 rounded-2xl text-center border border-slate-100 shadow-sm">
+                <p className="text-2xl font-bold text-primary-consumer">{scannedProperty.propertyData.squareMeters}</p>
                 <p className="text-sm text-slate-600 mt-1">m²</p>
               </div>
             </div>
 
             {/* Owner Wallet */}
-            <div className="bg-slate-50 p-4 rounded-lg">
+            <div className="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
               <p className="text-sm text-slate-600 mb-1">Owner Wallet</p>
               <p className="font-mono text-sm text-slate-900">{truncateAddress(scannedProperty.ownerWallet)}</p>
             </div>
 
             {/* On-Chain Verification Panel */}
-            <div className="bg-slate-50 p-4 rounded-lg space-y-3">
+            <div className="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm space-y-3">
               <p className="font-semibold text-slate-900 mb-3">On-Chain Verification</p>
               <div className="flex justify-between items-center py-2 border-b border-slate-200">
                 <span className="text-sm text-slate-600">Chain Hash</span>
@@ -410,13 +410,13 @@ const ScanPage = () => {
               </div>
               <div className="flex justify-between items-center py-2 border-b border-slate-200">
                 <span className="text-sm text-slate-600">Block Confirmations</span>
-                <span className="font-semibold text-teal-600">{generateConfirmations()}</span>
+                <span className="font-semibold text-primary-consumer">{generateConfirmations()}</span>
               </div>
               <div className="flex justify-between items-center py-2">
                 <span className="text-sm text-slate-600">Verified At</span>
                 <span className="text-sm text-slate-900">{new Date().toLocaleTimeString()}</span>
               </div>
-              <div className="mt-3 inline-block bg-emerald-100 text-emerald-800 text-xs px-3 py-1 rounded-full font-medium">
+              <div className="mt-3 inline-block bg-gold-50 text-gold-800 text-xs px-3 py-1 rounded-full font-medium border border-gold-200">
                 On-Chain: Anchored
               </div>
             </div>
@@ -431,19 +431,19 @@ const ScanPage = () => {
             <div className="space-y-3 pt-4">
               <Link
                 href={`/wallet/${scannedProperty.id}`}
-                className="block w-full px-6 py-3 bg-gradient-to-r from-teal-500 to-emerald-500 text-white rounded-lg font-semibold text-center hover:from-teal-600 hover:to-emerald-600 transition-all"
+                className="block w-full px-6 py-3 wine-gradient text-white rounded-2xl font-semibold text-center hover:opacity-90 transition-opacity"
               >
                 View Full Property
               </Link>
               <button
                 onClick={handleRetry}
-                className="w-full px-6 py-3 border-2 border-teal-500 text-teal-600 rounded-lg font-semibold hover:bg-teal-50 transition-all"
+                className="w-full px-6 py-3 border-2 border-primary-consumer text-primary-consumer rounded-2xl font-semibold hover:bg-wine-50 transition-colors"
               >
                 Scan Another Property
               </button>
               <Link
                 href="/wallet"
-                className="block w-full px-6 py-3 bg-slate-100 text-slate-700 rounded-lg font-semibold text-center hover:bg-slate-200 transition-all"
+                className="block w-full px-6 py-3 bg-slate-100 text-slate-700 rounded-2xl font-semibold text-center hover:bg-slate-200 transition-colors"
               >
                 Back to Properties
               </Link>

@@ -66,13 +66,13 @@ export default function ActivityPage() {
   const getActivityColor = (type: string) => {
     switch (type.toLowerCase()) {
       case 'verified':
-        return 'bg-emerald-100 text-emerald-600';
+        return 'bg-gold-50 text-gold-700';
       case 'transfer':
-        return 'bg-blue-100 text-blue-600';
+        return 'bg-blue-50 text-blue-700';
       case 'listing':
-        return 'bg-teal-100 text-teal-600';
+        return 'bg-wine-50 text-wine-700';
       case 'reserve':
-        return 'bg-amber-100 text-amber-600';
+        return 'bg-amber-100 text-amber-700';
       default:
         return 'bg-slate-100 text-slate-600';
     }
@@ -81,7 +81,7 @@ export default function ActivityPage() {
   const getStatusBadge = (status: string) => {
     switch (status.toLowerCase()) {
       case 'completed':
-        return 'bg-emerald-100 text-emerald-700';
+        return 'bg-gold-50 text-gold-700';
       case 'pending':
         return 'bg-amber-100 text-amber-700';
       case 'failed':
@@ -107,7 +107,7 @@ export default function ActivityPage() {
               onClick={() => setFilter(type)}
               className={`whitespace-nowrap px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                 filter === type
-                  ? 'bg-teal-500 text-white'
+                  ? 'wine-gradient text-white'
                   : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
               }`}
             >
@@ -123,7 +123,7 @@ export default function ActivityPage() {
           sortedActions.map((action: any, index: number) => (
             <div
               key={index}
-              className="p-4 bg-white rounded-lg shadow hover:shadow-md transition-shadow"
+              className="p-4 bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow border border-slate-100"
             >
               <div className="flex items-start gap-4">
                 {/* Icon */}

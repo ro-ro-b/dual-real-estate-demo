@@ -47,7 +47,7 @@ export default function PortfolioPage() {
   const statusBadgeColor = (status: string) => {
     switch (status.toLowerCase()) {
       case 'available':
-        return 'bg-emerald-100 text-emerald-700';
+        return 'bg-gold-50 text-gold-700';
       case 'reserved':
         return 'bg-amber-100 text-amber-700';
       case 'sold':
@@ -60,7 +60,7 @@ export default function PortfolioPage() {
   const getStatusDot = (status: string) => {
     switch (status.toLowerCase()) {
       case 'available':
-        return 'bg-emerald-500';
+        return 'bg-gold-500';
       case 'reserved':
         return 'bg-amber-500';
       case 'sold':
@@ -78,7 +78,7 @@ export default function PortfolioPage() {
       </div>
 
       {/* Portfolio Value Card */}
-      <div className="bg-gradient-to-br from-teal-500 to-emerald-500 rounded-lg p-6 mb-6 text-white shadow-lg">
+      <div className="wine-gradient rounded-2xl p-6 mb-6 text-white shadow-lg">
         <p className="text-sm font-medium opacity-90">Total Portfolio Value</p>
         <p className="text-3xl font-bold mt-2">${portfolioValue.toLocaleString()}</p>
         <div className="flex items-center gap-2 mt-3">
@@ -91,19 +91,19 @@ export default function PortfolioPage() {
       <div className="mb-6">
         <h2 className="text-lg font-semibold text-slate-900 mb-4">Properties by Status</h2>
         <div className="grid grid-cols-3 gap-3">
-          <div className="p-4 bg-white rounded-lg shadow">
+          <div className="p-4 bg-white rounded-2xl shadow-sm border border-slate-100">
             <p className="text-xs text-slate-500 uppercase tracking-wide font-semibold mb-2">
               Available
             </p>
-            <p className="text-2xl font-bold text-emerald-600">{propertyStatuses.available}</p>
+            <p className="text-2xl font-bold text-gold-600">{propertyStatuses.available}</p>
           </div>
-          <div className="p-4 bg-white rounded-lg shadow">
+          <div className="p-4 bg-white rounded-2xl shadow-sm border border-slate-100">
             <p className="text-xs text-slate-500 uppercase tracking-wide font-semibold mb-2">
               Reserved
             </p>
             <p className="text-2xl font-bold text-amber-600">{propertyStatuses.reserved}</p>
           </div>
-          <div className="p-4 bg-white rounded-lg shadow">
+          <div className="p-4 bg-white rounded-2xl shadow-sm border border-slate-100">
             <p className="text-xs text-slate-500 uppercase tracking-wide font-semibold mb-2">
               Sold
             </p>
@@ -121,10 +121,10 @@ export default function PortfolioPage() {
               <Link
                 key={property.id}
                 href={`/wallet/${property.id}`}
-                className="block p-4 bg-white rounded-lg shadow hover:shadow-md transition-shadow"
+                className="block p-4 bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow border border-slate-100"
               >
                 <div className="flex items-start gap-4">
-                  <div className="w-16 h-16 bg-slate-200 rounded overflow-hidden flex-shrink-0">
+                  <div className="w-16 h-16 bg-slate-200 rounded-lg overflow-hidden flex-shrink-0">
                     <img
                       src={property.faces[0]?.url || 'https://images.unsplash.com/photo-1512917774080-9b274b3057b7?w=1000&h=667&fit=crop'}
                       alt={property.propertyData.address}
@@ -163,7 +163,7 @@ export default function PortfolioPage() {
             <p className="text-slate-500">No properties in your portfolio</p>
             <Link
               href="/browse"
-              className="text-teal-500 text-sm mt-2 inline-block font-medium"
+              className="text-primary-consumer text-sm mt-2 inline-block font-medium"
             >
               Browse properties
             </Link>
@@ -172,9 +172,9 @@ export default function PortfolioPage() {
       </div>
 
       {/* On-Chain Status Summary */}
-      <div className="p-4 bg-slate-50 rounded-lg mb-6">
+      <div className="p-4 bg-white rounded-2xl border border-slate-100 shadow-sm mb-6">
         <h3 className="text-sm font-semibold text-slate-900 mb-3 flex items-center gap-2">
-          <span className="material-symbols-outlined text-base text-emerald-500">verified</span>
+          <span className="material-symbols-outlined text-base text-gold-600">verified</span>
           On-Chain Anchoring
         </h3>
         <div className="space-y-2 text-sm">
@@ -184,7 +184,7 @@ export default function PortfolioPage() {
           </div>
           <div className="flex justify-between">
             <span className="text-slate-600">Verified On-Chain:</span>
-            <span className="font-semibold text-emerald-600">{ownedProperties.length}</span>
+            <span className="font-semibold text-gold-600">{ownedProperties.length}</span>
           </div>
           <div className="flex justify-between">
             <span className="text-slate-600">Network:</span>

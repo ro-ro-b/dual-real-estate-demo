@@ -38,7 +38,7 @@ export default function BrowsePage() {
   const statusBadgeColor = (status: string) => {
     switch (status.toLowerCase()) {
       case 'available':
-        return 'bg-emerald-100 text-emerald-700';
+        return 'bg-gold-50 text-gold-700';
       case 'reserved':
         return 'bg-amber-100 text-amber-700';
       case 'sold':
@@ -62,7 +62,7 @@ export default function BrowsePage() {
           placeholder="Search by address or city..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 text-sm"
+          className="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:border-primary-consumer focus:ring-1 focus:ring-primary-consumer/20 text-sm"
         />
         <span className="absolute right-3 top-3.5 text-slate-400 material-symbols-outlined">
           search
@@ -78,7 +78,7 @@ export default function BrowsePage() {
               onClick={() => setFilter(category)}
               className={`whitespace-nowrap px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                 filter === category
-                  ? 'bg-teal-500 text-white'
+                  ? 'wine-gradient text-white'
                   : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
               }`}
             >
@@ -95,7 +95,7 @@ export default function BrowsePage() {
             <Link
               key={property.id}
               href={`/browse/${property.id}`}
-              className="block bg-white rounded-lg overflow-hidden shadow hover:shadow-md transition-shadow"
+              className="block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow border border-slate-100"
             >
               {/* Image */}
               <div className="relative w-full h-48 bg-slate-200 overflow-hidden">

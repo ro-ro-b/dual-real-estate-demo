@@ -36,7 +36,7 @@ export default function PropertiesPage() {
   const statusBadgeColor = (status: string) => {
     switch (status.toLowerCase()) {
       case 'available':
-        return 'bg-emerald-100 text-emerald-700';
+        return 'bg-gold-50 text-gold-700';
       case 'reserved':
         return 'bg-amber-100 text-amber-700';
       case 'sold':
@@ -49,7 +49,7 @@ export default function PropertiesPage() {
   const getStatusDot = (status: string) => {
     switch (status.toLowerCase()) {
       case 'available':
-        return 'bg-emerald-500';
+        return 'bg-gold-500';
       case 'reserved':
         return 'bg-amber-500';
       case 'sold':
@@ -77,7 +77,7 @@ export default function PropertiesPage() {
             onClick={() => setFilter(status)}
             className={`whitespace-nowrap px-4 py-2 rounded-full text-sm font-medium transition-colors ${
               filter === status
-                ? 'bg-teal-500 text-white'
+                ? 'wine-gradient text-white'
                 : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
             }`}
           >
@@ -93,7 +93,7 @@ export default function PropertiesPage() {
             <Link
               key={property.id}
               href={`/wallet/${property.id}`}
-              className="block bg-white rounded-lg overflow-hidden shadow hover:shadow-md transition-shadow"
+              className="block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow border border-slate-100"
             >
               {/* Image */}
               <div className="relative w-full h-48 bg-slate-200 overflow-hidden">

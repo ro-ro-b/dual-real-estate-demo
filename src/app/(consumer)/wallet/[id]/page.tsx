@@ -42,7 +42,7 @@ export default function PropertyDetailPage() {
     return (
       <div className="px-4 pt-6 text-center">
         <p className="text-slate-500">Property not found</p>
-        <Link href="/wallet" className="text-teal-500 text-sm mt-4 inline-block">
+        <Link href="/wallet" className="text-primary-consumer text-sm mt-4 inline-block">
           Back to Properties
         </Link>
       </div>
@@ -52,7 +52,7 @@ export default function PropertyDetailPage() {
   const statusBadgeColor = (status: string) => {
     switch (status.toLowerCase()) {
       case 'available':
-        return 'bg-emerald-100 text-emerald-700';
+        return 'bg-gold-50 text-gold-700';
       case 'reserved':
         return 'bg-amber-100 text-amber-700';
       case 'sold':
@@ -94,7 +94,7 @@ export default function PropertyDetailPage() {
       {/* Back Button */}
       <button
         onClick={() => router.back()}
-        className="flex items-center gap-2 text-teal-500 hover:text-teal-600 px-4 mb-4 text-sm font-medium"
+        className="flex items-center gap-2 text-primary-consumer hover:text-primary-consumer/80 px-4 mb-4 text-sm font-medium"
       >
         <span className="material-symbols-outlined text-lg">arrow_back</span>
         Back
@@ -128,7 +128,7 @@ export default function PropertyDetailPage() {
         </div>
 
         {/* Specs */}
-        <div className="grid grid-cols-3 gap-4 p-4 bg-slate-50 rounded-lg">
+        <div className="grid grid-cols-3 gap-4 p-4 bg-background-light rounded-2xl border border-slate-100">
           <div>
             <p className="text-xs text-slate-500 uppercase tracking-wide font-semibold">Bedrooms</p>
             <p className="text-2xl font-bold text-slate-900 mt-1">{property.propertyData.bedrooms}</p>
@@ -150,15 +150,15 @@ export default function PropertyDetailPage() {
         </div>
 
         {/* Owner Info */}
-        <div className="p-4 bg-slate-50 rounded-lg">
+        <div className="p-4 bg-white rounded-2xl border border-slate-100 shadow-sm">
           <p className="text-xs text-slate-500 uppercase tracking-wide font-semibold mb-2">Owner</p>
           <p className="font-mono text-sm text-slate-900">{truncateWallet(property.ownerWallet)}</p>
         </div>
 
         {/* On-Chain Status */}
-        <div className="p-4 bg-slate-50 rounded-lg">
+        <div className="p-4 bg-white rounded-2xl border border-slate-100 shadow-sm">
           <h3 className="text-sm font-semibold text-slate-900 mb-3 flex items-center gap-2">
-            <span className="material-symbols-outlined text-base text-emerald-500">verified</span>
+            <span className="material-symbols-outlined text-base text-gold-600">verified</span>
             On-Chain Verification
           </h3>
           <div className="space-y-2 text-sm">
@@ -172,7 +172,7 @@ export default function PropertyDetailPage() {
             </div>
             <div className="flex justify-between">
               <span className="text-slate-600">Confirmations:</span>
-              <span className="font-semibold text-emerald-600">{generateConfirmations()} confirmed</span>
+              <span className="font-semibold text-gold-600">{generateConfirmations()} confirmed</span>
             </div>
           </div>
         </div>
@@ -184,8 +184,8 @@ export default function PropertyDetailPage() {
             <div className="space-y-3">
               {actions.map((action, index) => (
                 <div key={index} className="flex gap-3 pb-3 border-b border-slate-100 last:border-b-0">
-                  <div className="flex-shrink-0 w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center">
-                    <span className="material-symbols-outlined text-base text-teal-600">
+                  <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gold-50 flex items-center justify-center">
+                    <span className="material-symbols-outlined text-base text-gold-700">
                       {getActionIcon(action.type)}
                     </span>
                   </div>
@@ -195,7 +195,7 @@ export default function PropertyDetailPage() {
                       {new Date(action.timestamp).toLocaleDateString()}
                     </p>
                   </div>
-                  <div className="flex-shrink-0 text-xs font-medium text-emerald-600">
+                  <div className="flex-shrink-0 text-xs font-medium text-gold-600">
                     {action.status}
                   </div>
                 </div>
@@ -206,11 +206,11 @@ export default function PropertyDetailPage() {
 
         {/* Action Buttons */}
         <div className="flex gap-3 pt-4">
-          <button className="flex-1 py-3 rounded-lg bg-teal-500 text-white font-semibold hover:bg-teal-600 transition-colors flex items-center justify-center gap-2">
+          <button className="flex-1 py-3 rounded-2xl wine-gradient text-white font-semibold hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
             <span className="material-symbols-outlined">send</span>
             Transfer
           </button>
-          <button className="flex-1 py-3 rounded-lg border-2 border-teal-500 text-teal-500 font-semibold hover:bg-teal-50 transition-colors flex items-center justify-center gap-2">
+          <button className="flex-1 py-3 rounded-2xl bg-gold-50 text-gold-800 font-semibold hover:bg-gold-100 transition-colors flex items-center justify-center gap-2 border border-gold-200">
             <span className="material-symbols-outlined">share</span>
             Share
           </button>

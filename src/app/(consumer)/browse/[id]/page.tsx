@@ -33,7 +33,7 @@ export default function BrowsePropertyDetailPage() {
     return (
       <div className="px-4 pt-6 text-center">
         <p className="text-slate-500">Property not found</p>
-        <Link href="/browse" className="text-teal-500 text-sm mt-4 inline-block">
+        <Link href="/browse" className="text-primary-consumer text-sm mt-4 inline-block">
           Back to Browse
         </Link>
       </div>
@@ -43,7 +43,7 @@ export default function BrowsePropertyDetailPage() {
   const statusBadgeColor = (status: string) => {
     switch (status.toLowerCase()) {
       case 'available':
-        return 'bg-emerald-100 text-emerald-700';
+        return 'bg-gold-50 text-gold-700';
       case 'reserved':
         return 'bg-amber-100 text-amber-700';
       case 'sold':
@@ -70,7 +70,7 @@ export default function BrowsePropertyDetailPage() {
       {/* Back Button */}
       <button
         onClick={() => router.back()}
-        className="flex items-center gap-2 text-teal-500 hover:text-teal-600 px-4 mb-4 text-sm font-medium"
+        className="flex items-center gap-2 text-primary-consumer hover:text-primary-consumer/80 px-4 mb-4 text-sm font-medium"
       >
         <span className="material-symbols-outlined text-lg">arrow_back</span>
         Back
@@ -104,7 +104,7 @@ export default function BrowsePropertyDetailPage() {
         </div>
 
         {/* Specs */}
-        <div className="grid grid-cols-3 gap-4 p-4 bg-slate-50 rounded-lg">
+        <div className="grid grid-cols-3 gap-4 p-4 bg-background-light rounded-2xl border border-slate-100">
           <div>
             <p className="text-xs text-slate-500 uppercase tracking-wide font-semibold">Bedrooms</p>
             <p className="text-2xl font-bold text-slate-900 mt-1">{property.propertyData.bedrooms}</p>
@@ -126,20 +126,20 @@ export default function BrowsePropertyDetailPage() {
         </div>
 
         {/* DUAL Network Badge */}
-        <div className="p-4 bg-gradient-to-br from-teal-50 to-emerald-50 rounded-lg border border-teal-200">
+        <div className="p-4 bg-gold-50 rounded-2xl border border-gold-200">
           <div className="flex items-center gap-2 mb-2">
-            <span className="material-symbols-outlined text-teal-600">verified_user</span>
-            <h3 className="text-sm font-semibold text-teal-900">DUAL Network Property</h3>
+            <span className="material-symbols-outlined text-gold-700">verified_user</span>
+            <h3 className="text-sm font-semibold text-gold-900">DUAL Network Property</h3>
           </div>
-          <p className="text-xs text-teal-700">
+          <p className="text-xs text-gold-700">
             This property is verified and anchored on-chain via the DUAL Real Estate protocol.
           </p>
         </div>
 
         {/* On-Chain Status */}
-        <div className="p-4 bg-slate-50 rounded-lg">
+        <div className="p-4 bg-white rounded-2xl border border-slate-100 shadow-sm">
           <h3 className="text-sm font-semibold text-slate-900 mb-3 flex items-center gap-2">
-            <span className="material-symbols-outlined text-base text-emerald-500">verified</span>
+            <span className="material-symbols-outlined text-base text-gold-600">verified</span>
             On-Chain Verification
           </h3>
           <div className="space-y-2 text-sm">
@@ -153,24 +153,24 @@ export default function BrowsePropertyDetailPage() {
             </div>
             <div className="flex justify-between">
               <span className="text-slate-600">Confirmations:</span>
-              <span className="font-semibold text-emerald-600">{generateConfirmations()} confirmed</span>
+              <span className="font-semibold text-gold-600">{generateConfirmations()} confirmed</span>
             </div>
           </div>
         </div>
 
         {/* Owner Info */}
-        <div className="p-4 bg-slate-50 rounded-lg">
+        <div className="p-4 bg-white rounded-2xl border border-slate-100 shadow-sm">
           <p className="text-xs text-slate-500 uppercase tracking-wide font-semibold mb-2">Owner</p>
           <p className="font-mono text-sm text-slate-900">{truncateWallet(property.ownerWallet)}</p>
         </div>
 
         {/* Action Buttons */}
         <div className="flex gap-3 pt-4">
-          <button className="flex-1 py-3 rounded-lg bg-gradient-to-br from-teal-400 to-emerald-500 text-white font-semibold hover:shadow-lg transition-shadow flex items-center justify-center gap-2">
+          <button className="flex-1 py-3 rounded-2xl wine-gradient text-white font-semibold hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
             <span className="material-symbols-outlined">event_available</span>
             Reserve
           </button>
-          <button className="flex-1 py-3 rounded-lg border-2 border-teal-500 text-teal-500 font-semibold hover:bg-teal-50 transition-colors flex items-center justify-center gap-2">
+          <button className="flex-1 py-3 rounded-2xl bg-gold-50 text-gold-800 font-semibold hover:bg-gold-100 transition-colors flex items-center justify-center gap-2 border border-gold-200">
             <span className="material-symbols-outlined">local_offer</span>
             Make Offer
           </button>
