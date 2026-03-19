@@ -79,7 +79,7 @@ export default function PropertiesPage() {
               DUAL Network
             </h1>
             <p className="text-slate-400 font-mono text-sm">
-              {filteredAndSortedProperties.length} Property Tokens · {anchoredCount} Anchored on BLOCKv · Verified
+              {filteredAndSortedProperties.length} Property Tokens · {anchoredCount} Anchored on DUAL · Verified
             </p>
           </div>
           <div className="grid grid-cols-2 gap-4">
