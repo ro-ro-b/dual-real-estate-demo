@@ -56,13 +56,13 @@ export default function TransactionsPage() {
   const getActionColor = (type: string) => {
     switch (type) {
       case 'PROPERTY_CREATED':
-        return 'text-[#14b8a7]';
+        return 'text-primary-consumer';
       case 'PROPERTY_ANCHORED':
         return 'text-blue-500';
       case 'PROPERTY_RESERVED':
         return 'text-amber-500';
       case 'PROPERTY_ANCHORING':
-        return 'text-[#14b8a7]';
+        return 'text-gold-600';
       default:
         return 'text-slate-400';
     }
@@ -71,7 +71,7 @@ export default function TransactionsPage() {
   const getStatusColor = (status: 'completed' | 'pending' | 'failed') => {
     switch (status) {
       case 'completed':
-        return 'bg-emerald-100 text-emerald-700';
+        return 'bg-gold-100 text-gold-800';
       case 'pending':
         return 'bg-amber-100 text-amber-700';
       case 'failed':
@@ -88,7 +88,7 @@ export default function TransactionsPage() {
       {/* Title */}
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
         <div className="flex items-center gap-4">
-          <div className="p-3 bg-[#14b8a7]/20 rounded-xl text-[#14b8a7]">
+          <div className="p-3 bg-wine-50 rounded-xl text-primary-consumer">
             <span className="material-symbols-outlined text-3xl">receipt_long</span>
           </div>
           <div>
@@ -106,8 +106,8 @@ export default function TransactionsPage() {
             onClick={() => setStatusFilter(filter)}
             className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
               statusFilter === filter
-                ? 'bg-[#14b8a7] text-white shadow-lg shadow-[#14b8a7]/20'
-                : 'bg-white border border-[#14b8a7]/20 text-slate-900 hover:border-[#14b8a7]/40'
+                ? 'bg-gradient-to-r from-primary-consumer to-wine-700 text-white shadow-lg shadow-primary-consumer/20'
+                : 'bg-white border border-gold-200 text-slate-900 hover:border-gold-400'
             }`}
           >
             {filter.charAt(0).toUpperCase() + filter.slice(1)}
@@ -116,7 +116,7 @@ export default function TransactionsPage() {
       </div>
 
       {/* Transactions Table */}
-      <div className="bg-white rounded-xl border border-[#14b8a7]/10 overflow-hidden shadow-sm">
+      <div className="bg-white rounded-xl border border-wine-100 overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead>
@@ -128,7 +128,7 @@ export default function TransactionsPage() {
                 <th className="px-5 py-4">Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#14b8a7]/5">
+            <tbody className="divide-y divide-wine-100/50">
               {sortedActions.map((action: any) => {
                 const property = properties.find((p: any) => p.id === action.objectId);
                 const actionDate = new Date(action.timestamp);
@@ -152,7 +152,7 @@ export default function TransactionsPage() {
                 }
 
                 return (
-                  <tr key={action.id} className="hover:bg-[#14b8a7]/5 transition-colors">
+                  <tr key={action.id} className="hover:bg-wine-50/50 transition-colors">
                     <td className="px-5 py-4 text-sm text-slate-500 font-mono">{timeLabel}</td>
                     <td className="px-5 py-4">
                       <div className="flex items-center gap-2">

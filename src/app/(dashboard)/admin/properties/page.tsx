@@ -45,7 +45,7 @@ export default function AdminPropertiesPage() {
   const getOnChainColor = (status: 'pending' | 'anchored' | 'failed') => {
     switch (status) {
       case 'anchored':
-        return 'bg-emerald-100 text-emerald-700';
+        return 'bg-gold-100 text-gold-800';
       case 'pending':
         return 'bg-amber-100 text-amber-700';
       case 'failed':
@@ -58,7 +58,7 @@ export default function AdminPropertiesPage() {
       {/* Title */}
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
         <div className="flex items-center gap-4">
-          <div className="p-3 bg-[#14b8a7]/20 rounded-xl text-[#14b8a7]">
+          <div className="p-3 bg-wine-50 rounded-xl text-primary-consumer">
             <span className="material-symbols-outlined text-3xl">domain</span>
           </div>
           <div>
@@ -68,7 +68,7 @@ export default function AdminPropertiesPage() {
         </div>
         <Link
           href="/admin/mint"
-          className="bg-[#14b8a7] text-white px-5 py-2.5 rounded-xl font-semibold flex items-center gap-2 hover:bg-[#14b8a7]/90 transition-colors shadow-lg shadow-[#14b8a7]/20"
+          className="bg-gradient-to-r from-primary-consumer to-wine-700 text-white px-5 py-2.5 rounded-xl font-semibold flex items-center gap-2 hover:opacity-90 transition-opacity shadow-lg shadow-primary-consumer/20"
         >
           <span className="material-symbols-outlined text-[20px]">add_circle</span>
           New Property
@@ -82,7 +82,7 @@ export default function AdminPropertiesPage() {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value as any)}
-            className="px-4 py-2 rounded-lg border border-[#14b8a7]/20 bg-white text-slate-900 text-sm font-medium focus:outline-none focus:border-[#14b8a7]"
+            className="px-4 py-2 rounded-lg border border-gold-200 bg-white text-slate-900 text-sm font-medium focus:outline-none focus:border-primary-consumer focus:ring-2 focus:ring-primary-consumer/20"
           >
             <option value="all">All Properties</option>
             <option value="available">Available</option>
@@ -95,7 +95,7 @@ export default function AdminPropertiesPage() {
           <select
             value={onChainFilter}
             onChange={(e) => setOnChainFilter(e.target.value as any)}
-            className="px-4 py-2 rounded-lg border border-[#14b8a7]/20 bg-white text-slate-900 text-sm font-medium focus:outline-none focus:border-[#14b8a7]"
+            className="px-4 py-2 rounded-lg border border-gold-200 bg-white text-slate-900 text-sm font-medium focus:outline-none focus:border-primary-consumer focus:ring-2 focus:ring-primary-consumer/20"
           >
             <option value="all">All States</option>
             <option value="anchored">Anchored</option>
@@ -106,7 +106,7 @@ export default function AdminPropertiesPage() {
       </div>
 
       {/* Properties Table */}
-      <div className="bg-white rounded-xl border border-[#14b8a7]/10 overflow-hidden shadow-sm">
+      <div className="bg-white rounded-xl border border-wine-100 overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead>
@@ -120,9 +120,9 @@ export default function AdminPropertiesPage() {
                 <th className="px-5 py-4">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#14b8a7]/5">
+            <tbody className="divide-y divide-wine-100/50">
               {filteredProperties.map((property: any) => (
-                <tr key={property.id} className="hover:bg-[#14b8a7]/5 transition-colors">
+                <tr key={property.id} className="hover:bg-wine-50/50 transition-colors">
                   <td className="px-5 py-4">
                     <img
                       src={property.faces[0]?.url}
@@ -159,7 +159,7 @@ export default function AdminPropertiesPage() {
                     <div className="flex items-center gap-2">
                       <Link
                         href={`/properties/${property.id}`}
-                        className="text-[#14b8a7] hover:text-[#14b8a7]/80 text-xs font-bold transition-colors"
+                        className="text-primary-consumer hover:text-wine-700 text-xs font-bold transition-colors"
                       >
                         View
                       </Link>

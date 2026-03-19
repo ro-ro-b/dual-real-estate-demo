@@ -88,14 +88,14 @@ export default function MintPropertyPage() {
           <form onSubmit={handleSubmit}>
             <section className="bg-white p-6 md:p-8 rounded-xl border border-slate-200 shadow-sm mb-8">
               <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
-                <span className="material-symbols-outlined text-[#14b8a7]">info</span>
+                <span className="material-symbols-outlined text-gold-600">info</span>
                 Property Information
               </h2>
               <div className="space-y-6">
                 <div>
                   <label className="block text-sm font-medium mb-2">Property Address</label>
                   <input
-                    className="w-full rounded-lg border-slate-200 bg-[#f6f8f8] focus:ring-[#14b8a7] focus:border-[#14b8a7] p-3"
+                    className="w-full rounded-lg border border-slate-200 bg-[#f6f8f8] focus:ring-2 focus:ring-primary-consumer focus:border-primary-consumer p-3"
                     placeholder="123 Blockchain Way, Genesis City"
                     type="text"
                     value={formData.address}
@@ -106,7 +106,7 @@ export default function MintPropertyPage() {
                   <div>
                     <label className="block text-sm font-medium mb-2">City</label>
                     <input
-                      className="w-full rounded-lg border-slate-200 bg-[#f6f8f8] focus:ring-[#14b8a7] focus:border-[#14b8a7] p-3"
+                      className="w-full rounded-lg border border-slate-200 bg-[#f6f8f8] focus:ring-2 focus:ring-primary-consumer focus:border-primary-consumer p-3"
                       placeholder="New York"
                       type="text"
                       value={formData.city}
@@ -116,7 +116,7 @@ export default function MintPropertyPage() {
                   <div>
                     <label className="block text-sm font-medium mb-2">Country</label>
                     <input
-                      className="w-full rounded-lg border-slate-200 bg-[#f6f8f8] focus:ring-[#14b8a7] focus:border-[#14b8a7] p-3"
+                      className="w-full rounded-lg border border-slate-200 bg-[#f6f8f8] focus:ring-2 focus:ring-primary-consumer focus:border-primary-consumer p-3"
                       placeholder="USA"
                       type="text"
                       value={formData.country}
@@ -130,7 +130,7 @@ export default function MintPropertyPage() {
                     <div className="relative">
                       <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">$</span>
                       <input
-                        className="w-full rounded-lg border-slate-200 bg-[#f6f8f8] focus:ring-[#14b8a7] focus:border-[#14b8a7] p-3 pl-8"
+                        className="w-full rounded-lg border border-slate-200 bg-[#f6f8f8] focus:ring-2 focus:ring-primary-consumer focus:border-primary-consumer p-3 pl-8"
                         placeholder="500,000"
                         type="number"
                         value={formData.price || ''}
@@ -141,7 +141,7 @@ export default function MintPropertyPage() {
                   <div>
                     <label className="block text-sm font-medium mb-2">Area (Sqm)</label>
                     <input
-                      className="w-full rounded-lg border-slate-200 bg-[#f6f8f8] focus:ring-[#14b8a7] focus:border-[#14b8a7] p-3"
+                      className="w-full rounded-lg border border-slate-200 bg-[#f6f8f8] focus:ring-2 focus:ring-primary-consumer focus:border-primary-consumer p-3"
                       placeholder="120"
                       type="number"
                       value={formData.squareMeters || ''}
@@ -153,7 +153,7 @@ export default function MintPropertyPage() {
                   <div>
                     <label className="block text-sm font-medium mb-2">Bedrooms</label>
                     <input
-                      className="w-full rounded-lg border-slate-200 bg-[#f6f8f8] focus:ring-[#14b8a7] focus:border-[#14b8a7] p-3"
+                      className="w-full rounded-lg border border-slate-200 bg-[#f6f8f8] focus:ring-2 focus:ring-primary-consumer focus:border-primary-consumer p-3"
                       placeholder="3"
                       type="number"
                       value={formData.bedrooms || ''}
@@ -163,7 +163,7 @@ export default function MintPropertyPage() {
                   <div>
                     <label className="block text-sm font-medium mb-2">Bathrooms</label>
                     <input
-                      className="w-full rounded-lg border-slate-200 bg-[#f6f8f8] focus:ring-[#14b8a7] focus:border-[#14b8a7] p-3"
+                      className="w-full rounded-lg border border-slate-200 bg-[#f6f8f8] focus:ring-2 focus:ring-primary-consumer focus:border-primary-consumer p-3"
                       placeholder="2"
                       type="number"
                       value={formData.bathrooms || ''}
@@ -175,7 +175,7 @@ export default function MintPropertyPage() {
                   <div>
                     <label className="block text-sm font-medium mb-2">Latitude</label>
                     <input
-                      className="w-full rounded-lg border-slate-200 bg-[#f6f8f8] focus:ring-[#14b8a7] focus:border-[#14b8a7] p-3"
+                      className="w-full rounded-lg border border-slate-200 bg-[#f6f8f8] focus:ring-2 focus:ring-primary-consumer focus:border-primary-consumer p-3"
                       placeholder="-33.8688"
                       type="text"
                       value={formData.latitude || ''}
@@ -185,7 +185,7 @@ export default function MintPropertyPage() {
                   <div>
                     <label className="block text-sm font-medium mb-2">Longitude</label>
                     <input
-                      className="w-full rounded-lg border-slate-200 bg-[#f6f8f8] focus:ring-[#14b8a7] focus:border-[#14b8a7] p-3"
+                      className="w-full rounded-lg border border-slate-200 bg-[#f6f8f8] focus:ring-2 focus:ring-primary-consumer focus:border-primary-consumer p-3"
                       placeholder="151.2093"
                       type="text"
                       value={formData.longitude || ''}
@@ -196,7 +196,7 @@ export default function MintPropertyPage() {
                 <div>
                   <label className="block text-sm font-medium mb-2">Image URL</label>
                   <input
-                    className="w-full rounded-lg border-slate-200 bg-[#f6f8f8] focus:ring-[#14b8a7] focus:border-[#14b8a7] p-3"
+                    className="w-full rounded-lg border border-slate-200 bg-[#f6f8f8] focus:ring-2 focus:ring-primary-consumer focus:border-primary-consumer p-3"
                     placeholder="https://images.unsplash.com/photo-..."
                     type="url"
                     value={formData.imageUrl}
@@ -208,13 +208,13 @@ export default function MintPropertyPage() {
 
             <section className="bg-white p-6 md:p-8 rounded-xl border border-slate-200 shadow-sm opacity-80 mb-8">
               <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-                <span className="material-symbols-outlined text-[#14b8a7]">description</span>
+                <span className="material-symbols-outlined text-gold-600">description</span>
                 Template Settings
               </h2>
               <div className="p-4 rounded-lg bg-slate-50 border border-slate-200">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm font-semibold text-slate-500">Template</span>
-                  <span className="px-2 py-1 text-xs font-bold rounded bg-[#14b8a7]/10 text-[#14b8a7]">{template?.version || '1.0.0'}</span>
+                  <span className="px-2 py-1 text-xs font-bold rounded bg-gold-100 text-gold-800">{template?.version || '1.0.0'}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-semibold text-slate-500">Name</span>
@@ -227,7 +227,7 @@ export default function MintPropertyPage() {
             <button
               type="submit"
               disabled={!isFormValid || isSubmitting}
-              className="w-full bg-[#14b8a7] hover:bg-[#14b8a7]/90 text-white font-bold py-4 px-6 rounded-xl transition-all shadow-lg shadow-[#14b8a7]/20 flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-gradient-to-r from-primary-consumer to-wine-700 hover:opacity-90 text-white font-bold py-4 px-6 rounded-xl transition-all shadow-lg shadow-primary-consumer/20 flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <span>{isSubmitting ? 'Minting...' : 'Mint Property NFT'}</span>
               <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">bolt</span>
@@ -239,7 +239,7 @@ export default function MintPropertyPage() {
         <div className="lg:col-span-5">
           <div className="sticky top-24">
             <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
-              <span className="material-symbols-outlined text-[#14b8a7]">visibility</span>
+              <span className="material-symbols-outlined text-gold-600">visibility</span>
               Live Preview
             </h2>
 
@@ -251,15 +251,15 @@ export default function MintPropertyPage() {
                   style={{
                     backgroundImage: formData.imageUrl
                       ? `url('${formData.imageUrl}')`
-                      : 'linear-gradient(135deg, #14b8a7, #0f766e)',
+                      : 'linear-gradient(135deg, #791b3a, #a80e4e)',
                   }}
                 />
                 <div className="absolute top-4 left-4">
-                  <span className="bg-[#14b8a7] text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-md">New Listing</span>
+                  <span className="bg-primary-consumer text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-md">New Listing</span>
                 </div>
                 {formData.price > 0 && (
                   <div className="absolute bottom-4 right-4 bg-white/90 backdrop-blur px-3 py-1 rounded-lg text-sm font-bold shadow-lg">
-                    <span className="text-[#14b8a7]">$</span>{formData.price.toLocaleString()}
+                    <span className="text-primary-consumer">$</span>{formData.price.toLocaleString()}
                   </div>
                 )}
               </div>
@@ -273,15 +273,15 @@ export default function MintPropertyPage() {
                 </div>
                 <div className="grid grid-cols-3 gap-4 border-y border-slate-100 py-4">
                   <div className="flex flex-col items-center gap-1">
-                    <span className="material-symbols-outlined text-[#14b8a7]">bed</span>
+                    <span className="material-symbols-outlined text-gold-600">bed</span>
                     <span className="text-xs font-bold text-slate-400 uppercase">{formData.bedrooms || 0} Beds</span>
                   </div>
                   <div className="flex flex-col items-center gap-1">
-                    <span className="material-symbols-outlined text-[#14b8a7]">bathtub</span>
+                    <span className="material-symbols-outlined text-gold-600">bathtub</span>
                     <span className="text-xs font-bold text-slate-400 uppercase">{formData.bathrooms || 0} Baths</span>
                   </div>
                   <div className="flex flex-col items-center gap-1">
-                    <span className="material-symbols-outlined text-[#14b8a7]">square_foot</span>
+                    <span className="material-symbols-outlined text-gold-600">square_foot</span>
                     <span className="text-xs font-bold text-slate-400 uppercase">{formData.squareMeters || 0} Sqm</span>
                   </div>
                 </div>
@@ -289,11 +289,11 @@ export default function MintPropertyPage() {
             </div>
 
             {/* Help Card */}
-            <div className="mt-8 bg-[#14b8a7]/10 border border-[#14b8a7]/20 rounded-xl p-6">
+            <div className="mt-8 bg-wine-50 border border-wine-100 rounded-xl p-6">
               <div className="flex gap-4">
-                <span className="material-symbols-outlined text-[#14b8a7]">help</span>
+                <span className="material-symbols-outlined text-primary-consumer">help</span>
                 <div>
-                  <h4 className="font-bold text-[#14b8a7] mb-1">Need assistance?</h4>
+                  <h4 className="font-bold text-primary-consumer mb-1">Need assistance?</h4>
                   <p className="text-sm text-slate-600 leading-relaxed">
                     Minting a property creates a unique NFT on the blockchain representing ownership. Ensure all legal documentation matches the address provided.
                   </p>

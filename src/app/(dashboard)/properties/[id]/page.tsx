@@ -39,7 +39,7 @@ export default function PropertyDetailPage({
       <div className="space-y-4">
         <Link
           href="/properties"
-          className="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-emerald-400 transition-colors"
+          className="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-gold-400 transition-colors"
         >
           <span className="material-symbols-outlined text-lg">arrow_back</span>
           Back to Properties
@@ -63,8 +63,8 @@ export default function PropertyDetailPage({
   const sc = statusConfig[propertyData.status] || statusConfig.available;
 
   const activityIcons: Record<string, { icon: string; color: string }> = {
-    PROPERTY_CREATED: { icon: 'check_circle', color: 'bg-emerald-500' },
-    PROPERTY_ANCHORED: { icon: 'link', color: 'bg-emerald-500' },
+    PROPERTY_CREATED: { icon: 'check_circle', color: 'bg-gold-500' },
+    PROPERTY_ANCHORED: { icon: 'link', color: 'bg-gold-500' },
     PROPERTY_RESERVED: { icon: 'edit', color: 'bg-amber-500' },
     PROPERTY_ANCHORING: { icon: 'sync_alt', color: 'bg-blue-500' },
   };
@@ -74,7 +74,7 @@ export default function PropertyDetailPage({
       {/* Back Button */}
       <Link
         href="/properties"
-        className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-emerald-400 transition-colors"
+        className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-gold-400 transition-colors"
       >
         <span className="material-symbols-outlined text-lg">arrow_back</span>
         Back to Properties
@@ -96,7 +96,7 @@ export default function PropertyDetailPage({
           {/* Token Metadata */}
           <div className="flex flex-col justify-center space-y-6">
             <div>
-              <p className="text-xs font-mono uppercase tracking-widest text-emerald-400 mb-2">Property Token</p>
+              <p className="text-xs font-mono uppercase tracking-widest text-gold-400 mb-2">Property Token</p>
               <h1 className="text-3xl md:text-4xl font-bold text-slate-100 mb-2">{propertyData.address}</h1>
               <p className="text-slate-400 font-mono text-sm">{propertyData.city}, {propertyData.country}</p>
             </div>
@@ -114,18 +114,18 @@ export default function PropertyDetailPage({
                 <p className={`${sc.textColor} font-bold text-lg`}>{sc.label}</p>
               </div>
               <div className="bg-slate-950/50 border border-slate-700/50 rounded-xl p-4">
-                <p className="text-emerald-400 text-xs font-mono uppercase tracking-widest mb-1">On-Chain</p>
+                <p className="text-gold-400 text-xs font-mono uppercase tracking-widest mb-1">On-Chain</p>
                 <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
-                  <p className="text-emerald-300 font-bold text-sm uppercase">{onChainStatus}</p>
+                  <span className="w-2 h-2 bg-gold-400 rounded-full animate-pulse"></span>
+                  <p className="text-gold-300 font-bold text-sm uppercase">{onChainStatus}</p>
                 </div>
               </div>
             </div>
 
             {/* Current Value */}
-            <div className="bg-gradient-to-br from-emerald-950 to-slate-950 border border-emerald-500/30 rounded-xl p-6">
-              <p className="text-emerald-400 text-xs font-mono uppercase tracking-widest mb-2">Current Value</p>
-              <p className="text-emerald-100 text-3xl font-bold">${propertyData.price.toLocaleString()}</p>
+            <div className="bg-gradient-to-br from-primary-consumer/20 to-slate-950 border border-primary-consumer/30 rounded-xl p-6">
+              <p className="text-gold-400 text-xs font-mono uppercase tracking-widest mb-2">Current Value</p>
+              <p className="text-gold-100 text-3xl font-bold">${propertyData.price.toLocaleString()}</p>
             </div>
           </div>
         </div>
@@ -138,7 +138,7 @@ export default function PropertyDetailPage({
           {/* Property Details */}
           <section className="bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700/50 rounded-2xl p-6 shadow-xl">
             <h2 className="text-xl font-bold text-slate-100 mb-6 flex items-center gap-3">
-              <span className="material-symbols-outlined text-emerald-400">info</span> Property Details
+              <span className="material-symbols-outlined text-gold-400">info</span> Property Details
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
               <div className="space-y-2">
@@ -155,7 +155,7 @@ export default function PropertyDetailPage({
               </div>
               <div className="col-span-full pt-4 border-t border-slate-700/50 space-y-2">
                 <p className="text-xs font-mono uppercase tracking-widest text-slate-500">Coordinates</p>
-                <code className="block bg-slate-950/50 border border-slate-700/50 rounded-lg p-3 text-emerald-400 font-mono text-sm">
+                <code className="block bg-slate-950/50 border border-slate-700/50 rounded-lg p-3 text-gold-400 font-mono text-sm">
                   Lat: {propertyData.latitude}, Lon: {propertyData.longitude}
                 </code>
               </div>
@@ -165,7 +165,7 @@ export default function PropertyDetailPage({
           {/* Blockchain Verification Section */}
           <section className="bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700/50 rounded-2xl p-6 shadow-xl">
             <h2 className="text-xl font-bold text-slate-100 mb-6 flex items-center gap-3">
-              <span className="material-symbols-outlined text-emerald-400">verified</span> Blockchain Verification
+              <span className="material-symbols-outlined text-gold-400">verified</span> Blockchain Verification
             </h2>
             <div className="space-y-4">
               {property.contentHash && (
@@ -174,14 +174,14 @@ export default function PropertyDetailPage({
                     <p className="text-xs font-mono uppercase tracking-widest text-slate-500">Content Hash</p>
                     <button
                       onClick={(e: any) => copyToClipboard(property.contentHash || '', 'content')}
-                      className="text-emerald-400 hover:text-emerald-300 transition-colors"
+                      className="text-gold-400 hover:text-gold-300 transition-colors"
                     >
                       <span className="material-symbols-outlined text-lg">
                         {copiedHash === 'content' ? 'check' : 'content_copy'}
                       </span>
                     </button>
                   </div>
-                  <code className="block font-mono text-emerald-300 text-xs break-all bg-slate-950 p-3 rounded-lg border border-slate-700/50">
+                  <code className="block font-mono text-gold-300 text-xs break-all bg-slate-950 p-3 rounded-lg border border-slate-700/50">
                     {property.contentHash}
                   </code>
                   {property.explorerLinks?.contentHash && (
@@ -189,7 +189,7 @@ export default function PropertyDetailPage({
                       href={property.explorerLinks.contentHash}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 mt-2 px-3 py-2 bg-emerald-600/20 hover:bg-emerald-600/40 border border-emerald-500/50 rounded-lg text-xs font-bold text-emerald-300"
+                      className="inline-flex items-center gap-2 mt-2 px-3 py-2 bg-gold-600/20 hover:bg-gold-600/40 border border-gold-500/50 rounded-lg text-xs font-bold text-gold-300"
                     >
                       <span className="material-symbols-outlined text-sm">open_in_new</span>
                       View on Blockscout
@@ -204,14 +204,14 @@ export default function PropertyDetailPage({
                     <p className="text-xs font-mono uppercase tracking-widest text-slate-500">Integrity Hash</p>
                     <button
                       onClick={(e: any) => copyToClipboard(property.integrityHash || '', 'integrity')}
-                      className="text-emerald-400 hover:text-emerald-300 transition-colors"
+                      className="text-gold-400 hover:text-gold-300 transition-colors"
                     >
                       <span className="material-symbols-outlined text-lg">
                         {copiedHash === 'integrity' ? 'check' : 'content_copy'}
                       </span>
                     </button>
                   </div>
-                  <code className="block font-mono text-emerald-300 text-xs break-all bg-slate-950 p-3 rounded-lg border border-slate-700/50">
+                  <code className="block font-mono text-gold-300 text-xs break-all bg-slate-950 p-3 rounded-lg border border-slate-700/50">
                     {property.integrityHash}
                   </code>
                   {property.explorerLinks?.integrityHash && (
@@ -219,7 +219,7 @@ export default function PropertyDetailPage({
                       href={property.explorerLinks.integrityHash}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 mt-2 px-3 py-2 bg-emerald-600/20 hover:bg-emerald-600/40 border border-emerald-500/50 rounded-lg text-xs font-bold text-emerald-300"
+                      className="inline-flex items-center gap-2 mt-2 px-3 py-2 bg-gold-600/20 hover:bg-gold-600/40 border border-gold-500/50 rounded-lg text-xs font-bold text-gold-300"
                     >
                       <span className="material-symbols-outlined text-sm">open_in_new</span>
                       View on Blockscout
@@ -234,7 +234,7 @@ export default function PropertyDetailPage({
           {propertyActions.length > 0 && (
             <section className="bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700/50 rounded-2xl p-6 shadow-xl">
               <h2 className="text-xl font-bold text-slate-100 mb-6 flex items-center gap-3">
-                <span className="material-symbols-outlined text-emerald-400">history</span> Provenance & Activity
+                <span className="material-symbols-outlined text-gold-400">history</span> Provenance & Activity
               </h2>
               <div className="space-y-4">
                 {propertyActions.map((action: any) => {
@@ -253,7 +253,7 @@ export default function PropertyDetailPage({
                             day: 'numeric',
                           })}{' '}
                           •{' '}
-                          <span className={action.status === 'completed' ? 'text-emerald-400' : 'text-amber-400'}>
+                          <span className={action.status === 'completed' ? 'text-gold-400' : 'text-amber-400'}>
                             {action.status.toUpperCase()}
                           </span>
                         </p>
@@ -272,7 +272,7 @@ export default function PropertyDetailPage({
           <div className="bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700/50 rounded-2xl p-6 shadow-xl">
             <p className="text-xs font-mono uppercase tracking-widest text-slate-500 mb-4">Owner</p>
             <div className="space-y-3">
-              <code className="block font-mono text-emerald-400 text-xs break-all bg-slate-950 p-3 rounded-lg border border-slate-700/50">
+              <code className="block font-mono text-gold-400 text-xs break-all bg-slate-950 p-3 rounded-lg border border-slate-700/50">
                 {property.ownerWallet}
               </code>
               {property.explorerLinks?.owner && (
@@ -280,7 +280,7 @@ export default function PropertyDetailPage({
                   href={property.explorerLinks.owner}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full inline-flex items-center justify-center gap-2 px-4 py-2 bg-cyan-600/20 hover:bg-cyan-600/40 border border-cyan-500/50 rounded-lg text-xs font-bold text-cyan-300 transition-all"
+                  className="w-full inline-flex items-center justify-center gap-2 px-4 py-2 bg-gold-600/20 hover:bg-gold-600/40 border border-gold-500/50 rounded-lg text-xs font-bold text-gold-300 transition-all"
                 >
                   <span className="material-symbols-outlined text-sm">open_in_new</span>
                   View Owner
@@ -330,7 +330,7 @@ export default function PropertyDetailPage({
               <div className="space-y-2">
                 {faces.map((face: any) => (
                   <div key={face.id} className="bg-slate-950/50 border border-slate-700/50 rounded-lg p-3">
-                    <p className="text-xs font-mono text-cyan-400 uppercase tracking-wider mb-1">{face.type}</p>
+                    <p className="text-xs font-mono text-gold-400 uppercase tracking-wider mb-1">{face.type}</p>
                     <p className="text-xs text-slate-400 font-mono truncate">{face.url.substring(0, 40)}...</p>
                   </div>
                 ))}

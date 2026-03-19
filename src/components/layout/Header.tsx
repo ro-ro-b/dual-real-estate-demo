@@ -6,13 +6,13 @@ export function Header() {
         <div className="relative hidden md:block">
           <span className="material-symbols-outlined text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 text-xl">search</span>
           <input
-            className="pl-10 pr-4 py-2 bg-slate-100 border-none rounded-lg text-sm w-64 focus:ring-2 focus:ring-[#14b8a7]/20 focus:outline-none"
+            className="pl-10 pr-4 py-2 bg-slate-100 border-none rounded-lg text-sm w-64 focus:ring-2 focus:ring-primary-consumer/20 focus:outline-none"
             placeholder="Search properties..."
             type="text"
           />
         </div>
         <button className="flex items-center gap-2 px-4 py-2 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors">
-          <div className="size-2 rounded-full bg-[#14b8a7]"></div>
+          <div className="size-2 rounded-full bg-primary-consumer"></div>
           <span className="text-sm font-semibold text-slate-700">0x7a2d...F42D</span>
           <span className="material-symbols-outlined text-sm">keyboard_arrow_down</span>
         </button>

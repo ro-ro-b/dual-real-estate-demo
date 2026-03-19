@@ -75,7 +75,7 @@ export default function PropertiesPage() {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
             <h1 className="text-3xl md:text-4xl font-bold text-slate-100 mb-2 flex items-center gap-3">
-              <span className="text-emerald-500 font-mono text-2xl">◆</span>
+              <span className="text-gold-500 font-mono text-2xl">◆</span>
               DUAL Network
             </h1>
             <p className="text-slate-400 font-mono text-sm">
@@ -85,11 +85,11 @@ export default function PropertiesPage() {
           <div className="grid grid-cols-2 gap-4">
             <div className="bg-slate-950/50 border border-slate-700/50 rounded-xl p-4 text-center">
               <p className="text-xs font-mono uppercase tracking-widest text-slate-500 mb-1">Total Tokens</p>
-              <p className="text-2xl font-bold text-emerald-400">{properties.length}</p>
+              <p className="text-2xl font-bold text-gold-400">{properties.length}</p>
             </div>
             <div className="bg-slate-950/50 border border-slate-700/50 rounded-xl p-4 text-center">
               <p className="text-xs font-mono uppercase tracking-widest text-slate-500 mb-1">Anchored</p>
-              <p className="text-2xl font-bold text-emerald-400">{anchoredCount}</p>
+              <p className="text-2xl font-bold text-gold-400">{anchoredCount}</p>
             </div>
           </div>
         </div>
