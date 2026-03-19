@@ -116,7 +116,8 @@ export const dualClient = {
     },
     getProperty: async (id: string) => {
           const c = getDualClient();
-          return c.objects.getObject(id);
+          const obj = await c.objects.getObject(id);
+          return obj ? mapGatewayToProperty(obj) : null;
     },
     mintProperty: async (templateId: string, ownerWallet: string, propertyData: Record<string, unknown>) => {
           const c = getDualClient();

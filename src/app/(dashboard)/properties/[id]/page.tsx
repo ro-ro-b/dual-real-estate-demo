@@ -21,27 +21,17 @@ export default function PropertyDetailPage({
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [propertyRes, actionsRes] = await Promise.all([
-          fetch(`/api/properties/${params.id}`),
-          fetch(`/api/actions?objectId=${params.id}`),
-        ]);
-        if (propertyRes.ok) {
-          const propertyData = await propertyRes.json();
-          setProperty(propertyData);
-        }
-        if (actionsRes.ok) {
-          const actionsData = await actionsRes.json();
-          setPropertyActions(Array.isArray(actionsData) ? actionsData : actionsData.actions || []);
-        }
-      } catch (err) {
-        console.error('Failed to fetch data:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
+    // Fetch property data — don't let actions failure block the page
+    fetch(`/api/properties/${params.id}`)
+      .then((r: any) => r.ok ? r.json() : null)
+      .then((data: any) => { if (data && !data.error) setProperty(data); })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+    // Fetch actions separately — non-blocking
+    fetch(`/api/actions?objectId=${params.id}`)
+      .then((r: any) => r.ok ? r.json() : [])
+      .then((data: any) => setPropertyActions(Array.isArray(data) ? data : data?.actions || []))
+      .catch(() => {});
   }, [params.id]);
 
   if (!property) {
