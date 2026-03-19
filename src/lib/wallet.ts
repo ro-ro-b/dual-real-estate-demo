@@ -10,9 +10,9 @@ export interface EIP712Domain {
 }
 
 /**
- * Generate a random mock wallet address
+ * Generate a random test wallet address for minting
  */
-export function generateMockWallet(): string {
+export function generateWallet(): string {
   const randomBytes = Array.from({ length: 20 }, () =>
     Math.floor(Math.random() * 256)
       .toString(16)

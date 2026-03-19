@@ -1,5 +1,5 @@
 /**
- * Abstract DataProvider interface with Demo and DUAL implementations
+ * DataProvider interface for DUAL Platform API
  */
 
 import {
@@ -17,7 +17,7 @@ import {
 import { dualClient, DualApiError } from './dual-client';
 import { isDualConfigured } from './env'
 import * as db from './db';
-import { generateMockWallet } from './wallet';
+import { generateWallet } from './wallet';
 
 /**
  * DataProvider Interface

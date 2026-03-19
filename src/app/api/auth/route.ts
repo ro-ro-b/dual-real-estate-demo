@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic';
 
 import { NextRequest, NextResponse } from 'next/server';
 import { AuthSession, ApiResponse } from '@/types';
-import { generateMockWallet } from '@/lib/wallet';
+import { generateWallet } from '@/lib/wallet';
 
 export async function POST(req: NextRequest): Promise<Response> {
   try {
@@ -26,7 +26,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     }
 
     // For demo: accept any email/password combination
-    const wallet = generateMockWallet();
+    const wallet = generateWallet();
     const now = new Date();
     const expiresAt = new Date(now.getTime() + 24 * 60 * 60 * 1000); // 24 hours
 

@@ -45,9 +45,9 @@ export default function AdminPage() {
     PROPERTY_ANCHORING: { icon: 'local_offer', color: 'text-gold-600' },
   };
 
-  const demoStats = stats || { anchored: 0, totalProperties: 1, available: 0, totalValue: 0, totalValueChange: '+0%' };
-  const anchoredCount = demoStats.anchored || 0;
-  const totalCount = demoStats.totalProperties;
+  const displayStats = stats || { anchored: 0, totalProperties: 1, available: 0, totalValue: 0, totalValueChange: '+0%' };
+  const anchoredCount = displayStats.anchored || 0;
+  const totalCount = displayStats.totalProperties;
   const anchoredPercent = Math.round((anchoredCount / totalCount) * 100);
 
   return (
@@ -72,10 +72,10 @@ export default function AdminPage() {
       {/* Stats Row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mb-10">
         {[
-          { title: 'Total Properties', value: String(demoStats.totalProperties), icon: 'domain', trend: '+12%', up: true },
-          { title: 'Active Listings', value: String(demoStats.available), icon: 'list_alt', trend: '+5%', up: true },
-          { title: 'Total Volume', value: `$${(demoStats.totalValue / 1000000).toFixed(1)}M`, icon: 'payments', trend: demoStats.totalValueChange, up: true },
-          { title: 'Avg. Price', value: `$${(demoStats.totalValue / demoStats.totalProperties / 1000).toFixed(1)}K`, icon: 'equalizer', trend: '+8%', up: true },
+          { title: 'Total Properties', value: String(displayStats.totalProperties), icon: 'domain', trend: '+12%', up: true },
+          { title: 'Active Listings', value: String(displayStats.available), icon: 'list_alt', trend: '+5%', up: true },
+          { title: 'Total Volume', value: `$${(displayStats.totalValue / 1000000).toFixed(1)}M`, icon: 'payments', trend: displayStats.totalValueChange, up: true },
+          { title: 'Avg. Price', value: `$${(displayStats.totalValue / displayStats.totalProperties / 1000).toFixed(1)}K`, icon: 'equalizer', trend: '+8%', up: true },
         ].map((card: any) => (
           <div key={card.title} className="bg-white rounded-xl p-6 border border-wine-100 shadow-sm hover:border-wine-300 transition-all">
             <div className="flex justify-between items-start mb-4">

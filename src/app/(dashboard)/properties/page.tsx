@@ -39,7 +39,7 @@ export default function PropertiesPage() {
     fetchData();
   }, []);
 
-  const demoStats = stats || { totalProperties: 1, totalActions: 0, anchoredCount: 0, failedCount: 0, pendingCount: 0, organizations: 0, templates: 0, available: 0, reserved: 0, sold: 0, totalValue: 0, totalValueChange: '+0%' };
+  const displayStats = stats || { totalProperties: 1, totalActions: 0, anchoredCount: 0, failedCount: 0, pendingCount: 0, organizations: 0, templates: 0, available: 0, reserved: 0, sold: 0, totalValue: 0, totalValueChange: '+0%' };
 
   const filteredAndSortedProperties = useMemo(() => {
     let filtered = properties.filter((property: any) => {
@@ -96,7 +96,7 @@ export default function PropertiesPage() {
       </div>
 
       {/* Stats Row */}
-      <StatsCards stats={demoStats} />
+      <StatsCards stats={displayStats} />
 
       {/* Filters */}
       <PropertyFilters
