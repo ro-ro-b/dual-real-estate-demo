@@ -93,6 +93,8 @@ export interface DualObject {
 // Property Type
 export interface Property extends DualObject {
   propertyData: PropertyData;
+  contentHash?: string;
+  integrityHash?: string;
 }
 
 // Template Types

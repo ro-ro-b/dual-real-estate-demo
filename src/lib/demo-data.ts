@@ -34,8 +34,18 @@ export interface DualObject {
   onChainStatus: 'pending' | 'anchored' | 'failed';
 }
 
+export interface ExplorerLinks {
+  owner: string | null;
+  contentHash: string | null;
+  integrityHash: string | null;
+  org: string | null;
+}
+
 export interface Property extends DualObject {
   propertyData: PropertyData;
+  contentHash?: string;
+  integrityHash?: string;
+  explorerLinks?: ExplorerLinks;
 }
 
 export interface Action {
