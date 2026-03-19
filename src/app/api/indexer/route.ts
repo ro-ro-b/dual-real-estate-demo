@@ -33,32 +33,7 @@ export async function GET(req: NextRequest): Promise<Response> {
     if (orgId) filters.orgId = orgId;
     if (status) filters.status = status;
 
-    let objects: DualObject[] = [];
-
-    if (isDualConfigured()) {
-      objects = await dualClient.listProperties(filters);
-    } else {
-      // Demo data
-      objects = [
-        {
-          id: 'obj-1',
-          templateId: 'template-1',
-          orgId: 'org-1',
-          ownerWallet: '0x1234567890123456789012345678901234567890',
-          data: {
-            address: '123 Main St',
-            city: 'San Francisco',
-            state: 'CA',
-            propertyType: 'residential',
-          },
-          status: 'anchored',
-          onChainStatus: 'anchored',
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-          faces: [],
-        },
-      ];
-    }
+    const objects: DualObject[] = await dualClient.listProperties(filters);
 
     const total = objects.length;
     const start = (page - 1) * pageSize;

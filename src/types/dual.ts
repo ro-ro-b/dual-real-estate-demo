@@ -45,26 +45,31 @@ export interface PropertyData {
   state: string;
   zipCode: string;
   country: string;
-  latitude?: number;
-  longitude?: number;
-  squareFeet?: number;
-  bedrooms?: number;
-  bathrooms?: number;
-  yearBuilt?: number;
-  propertyType: 'residential' | 'commercial' | 'industrial' | 'land';
-  marketValue?: number;
-  taxAssessedValue?: number;
+  latitude: number;
+  longitude: number;
+  squareFeet: number;
+  squareMeters: number;
+  bedrooms: number;
+  bathrooms: number;
+  yearBuilt: number;
+  propertyType: 'residential' | 'commercial' | 'industrial' | 'land' | 'Token';
+  price: number;
+  marketValue: number;
+  taxAssessedValue: number;
   ownerName: string;
-  ownerEmail?: string;
-  ownerPhone?: string;
-  features?: string[];
-  description?: string;
+  ownerEmail: string;
+  ownerPhone: string;
+  features: string[];
+  description: string;
+  status: 'available' | 'reserved' | 'sold';
+  imageUrl: string;
 }
 
 // DUAL Object Type
 export interface DualObject {
   id: string;
   templateId: string;
+  templateName?: string;
   orgId: string;
   ownerWallet: string;
   data: Record<string, unknown>;
@@ -128,6 +133,8 @@ export interface Action {
   status: ActionStatus;
   result?: Record<string, unknown>;
   error?: string;
+  description: string;
+  timestamp: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -245,4 +252,10 @@ export interface DashboardStats {
   pendingCount: number;
   organizations: number;
   templates: number;
+  available: number;
+  reserved: number;
+  sold: number;
+  totalValue: number;
+  totalValueChange: string;
+  anchored?: number;
 }

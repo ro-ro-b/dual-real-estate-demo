@@ -10,50 +10,21 @@ import { isDualConfigured } from '@/lib/env';
 import { Template, ApiResponse } from '@/types';
 import { propertyToTemplatePayload } from '@/lib/template-schema';
 
-// Mock templates for demo
-const demoTemplates: Template[] = [
-  {
-    id: 'template-1',
-    name: 'real-estate::property::v1',
-    version: '1.0.0',
-    orgId: 'org-1',
-    schema: {},
-    properties: [
-      { name: 'address', type: 'string', required: true },
-      { name: 'city', type: 'string', required: true },
-      { name: 'propertyType', type: 'string', required: true },
-    ],
-    actions: [
-      { name: 'RESERVE', description: 'Reserve property', parameters: {}, validStates: ['anchored'] },
-      { name: 'TRANSFER', description: 'Transfer ownership', parameters: {}, validStates: ['anchored'] },
-    ],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-];
-
 export async function GET(): Promise<Response> {
   try {
-    if (isDualConfigured()) {
-      const templates = await dualClient.listTemplates();
-      return NextResponse.json<ApiResponse<Template[]>>({
-        success: true,
-        data: templates,
-      });
-    } else {
-      return NextResponse.json<ApiResponse<Template[]>>({
-        success: true,
-        data: demoTemplates,
-      });
-    }
+    const templates = await dualClient.listTemplates();
+    return NextResponse.json<ApiResponse<Template[]>>({
+      success: true,
+      data: templates,
+    });
   } catch (error) {
     console.error('Failed to list templates:', error);
     return NextResponse.json<ApiResponse<Template[]>>(
       {
-        success: true,
-        data: demoTemplates,
+        success: false,
+        error: 'Failed to list templates',
       },
-      { status: 200 }
+      { status: 500 }
     );
   }
 }
@@ -72,31 +43,11 @@ export async function POST(req: NextRequest): Promise<Response> {
       );
     }
 
-    if (isDualConfigured()) {
-      const template = await dualClient.createTemplate(body.name, '1.0.0', body.schema);
-      return NextResponse.json<ApiResponse<Template>>({
-        success: true,
-        data: template,
-      });
-    } else {
-      const newTemplate: Template = {
-        id: `template-${Date.now()}`,
-        name: body.name,
-        version: '1.0.0',
-        orgId: 'demo-org',
-        schema: body.schema,
-        properties: [],
-        actions: [],
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      };
-      demoTemplates.push(newTemplate);
-
-      return NextResponse.json<ApiResponse<Template>>({
-        success: true,
-        data: newTemplate,
-      });
-    }
+    const template = await dualClient.createTemplate(body.name, '1.0.0', body.schema);
+    return NextResponse.json<ApiResponse<Template>>({
+      success: true,
+      data: template,
+    });
   } catch (error) {
     console.error('Failed to create template:', error);
     return NextResponse.json<ApiResponse<Template>>(

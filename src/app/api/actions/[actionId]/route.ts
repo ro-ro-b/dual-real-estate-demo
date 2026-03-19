@@ -35,6 +35,8 @@ export async function GET(
       actor: '',
       parameters: {},
       status: 'pending',
+      description: '',
+      timestamp: new Date().toISOString(),
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };

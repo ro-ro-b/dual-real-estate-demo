@@ -214,11 +214,11 @@ export default function MintPropertyPage() {
               <div className="p-4 rounded-lg bg-slate-50 border border-slate-200">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm font-semibold text-slate-500">Template</span>
-                  <span className="px-2 py-1 text-xs font-bold rounded bg-[#14b8a7]/10 text-[#14b8a7]">{demoTemplate.version}</span>
+                  <span className="px-2 py-1 text-xs font-bold rounded bg-[#14b8a7]/10 text-[#14b8a7]">{template?.version || '1.0.0'}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-semibold text-slate-500">Name</span>
-                  <span className="text-sm font-medium font-mono">{demoTemplate.name}</span>
+                  <span className="text-sm font-medium font-mono">{template?.name || 'Loading...'}</span>
                 </div>
                 <p className="mt-4 text-xs text-slate-400 italic">Template fields are locked by administrator policy for this property type.</p>
               </div>

@@ -11,7 +11,23 @@ import { DashboardStats, ApiResponse } from '@/types';
 export async function GET(_req: NextRequest): Promise<Response> {
   try {
     const provider = getDataProvider();
-    const stats = await provider.getDashboardStats();
+    const baseStats = await provider.getDashboardStats();
+
+    // Ensure all required fields exist with defaults
+    const stats: DashboardStats = {
+      totalProperties: baseStats.totalProperties || 0,
+      totalActions: baseStats.totalActions || 0,
+      anchoredCount: baseStats.anchoredCount || 0,
+      failedCount: baseStats.failedCount || 0,
+      pendingCount: baseStats.pendingCount || 0,
+      organizations: baseStats.organizations || 0,
+      templates: baseStats.templates || 0,
+      available: 0,
+      reserved: 0,
+      sold: 0,
+      totalValue: 0,
+      totalValueChange: '0%',
+    };
 
     return NextResponse.json<ApiResponse<DashboardStats>>({
       success: true,
