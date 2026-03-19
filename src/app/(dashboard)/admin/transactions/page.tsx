@@ -1,17 +1,40 @@
 'use client';
 
-import { useState } from 'react';
-import { demoActions, demoProperties } from '@/lib/demo-data';
+import { useState, useEffect } from 'react';
+import type { Action, Property } from '@/types';
 
 export default function TransactionsPage() {
   const [statusFilter, setStatusFilter] = useState<'all' | 'completed' | 'pending' | 'failed'>('all');
+  const [actions, setActions] = useState<Action[]>([]);
+  const [properties, setProperties] = useState<Property[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const filteredActions = demoActions.filter((action) => {
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [actionsRes, propertiesRes] = await Promise.all([
+          fetch('/api/actions'),
+          fetch('/api/properties'),
+        ]);
+        const actionsData = await actionsRes.json();
+        const propertiesData = await propertiesRes.json();
+        setActions(Array.isArray(actionsData) ? actionsData : actionsData.actions || []);
+        setProperties(Array.isArray(propertiesData) ? propertiesData : propertiesData.properties || []);
+      } catch (err) {
+        console.error('Failed to fetch data:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const filteredActions = actions.filter((action: any) => {
     if (statusFilter === 'all') return true;
     return action.status === statusFilter;
   });
 
-  const sortedActions = [...filteredActions].sort((a, b) =>
+  const sortedActions = [...filteredActions].sort((a: any, b: any) =>
     new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
   );
 
@@ -106,8 +129,8 @@ export default function TransactionsPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-[#14b8a7]/5">
-              {sortedActions.map((action) => {
-                const property = demoProperties.find((p) => p.id === action.objectId);
+              {sortedActions.map((action: any) => {
+                const property = properties.find((p: any) => p.id === action.objectId);
                 const actionDate = new Date(action.timestamp);
                 const now = new Date();
                 const timeDiff = now.getTime() - actionDate.getTime();

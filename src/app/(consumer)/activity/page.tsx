@@ -1,19 +1,42 @@
 'use client';
 
-import { useState } from 'react';
-import { demoActions, demoProperties } from '@/lib/demo-data';
+import { useState, useEffect } from 'react';
+import type { Action, Property } from '@/types';
 
 type FilterActivityType = 'all' | 'purchases' | 'transfers' | 'verifications';
 
 export default function ActivityPage() {
   const [filter, setFilter] = useState<FilterActivityType>('all');
+  const [actions, setActions] = useState<Action[]>([]);
+  const [properties, setProperties] = useState<Property[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [actionsRes, propertiesRes] = await Promise.all([
+          fetch('/api/actions'),
+          fetch('/api/properties'),
+        ]);
+        const actionsData = await actionsRes.json();
+        const propertiesData = await propertiesRes.json();
+        setActions(Array.isArray(actionsData) ? actionsData : actionsData.actions || []);
+        setProperties(Array.isArray(propertiesData) ? propertiesData : propertiesData.properties || []);
+      } catch (err) {
+        console.error('Failed to fetch data:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
 
   const getPropertyAddressByObjectId = (objectId: string) => {
-    const property = demoProperties.find((p) => p.id === objectId);
+    const property = properties.find((p: any) => p.id === objectId);
     return property?.propertyData.address || 'Unknown property';
   };
 
-  const filteredActions = demoActions.filter((action) => {
+  const filteredActions = actions.filter((action: any) => {
     if (filter === 'all') return true;
     if (filter === 'purchases') return action.type.toLowerCase() === 'listing';
     if (filter === 'transfers') return action.type.toLowerCase() === 'transfer';
@@ -97,7 +120,7 @@ export default function ActivityPage() {
       {/* Activity Items */}
       <div className="space-y-3 pb-6">
         {sortedActions.length > 0 ? (
-          sortedActions.map((action, index) => (
+          sortedActions.map((action: any, index: number) => (
             <div
               key={index}
               className="p-4 bg-white rounded-lg shadow hover:shadow-md transition-shadow"

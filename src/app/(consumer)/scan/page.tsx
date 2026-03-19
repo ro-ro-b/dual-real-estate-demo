@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
-import { demoProperties } from '@/lib/demo-data';
+import type { Property } from '@/types';
 
 type ScanState = 'scanning' | 'verifying' | 'result';
 type ResultStatus = 'verified' | 'unverified' | 'unknown';
@@ -16,7 +16,8 @@ interface VerificationStep {
 const ScanPage = () => {
   const [state, setState] = useState<ScanState>('scanning');
   const [resultStatus, setResultStatus] = useState<ResultStatus>('unknown');
-  const [scannedProperty, setScannedProperty] = useState<typeof demoProperties[0] | null>(null);
+  const [scannedProperty, setScannedProperty] = useState<Property | null>(null);
+  const [properties, setProperties] = useState<Property[]>([]);
   const [verificationSteps, setVerificationSteps] = useState<VerificationStep[]>([
     { label: 'QR code decoded', status: 'done' },
     { label: 'Querying DUAL blockchain', status: 'pending' },
@@ -33,6 +34,20 @@ const ScanPage = () => {
     import('html5-qrcode').then((module) => {
       setHtml5Qrcode(() => module.Html5Qrcode);
     });
+  }, []);
+
+  // Fetch properties on mount
+  useEffect(() => {
+    const fetchProperties = async () => {
+      try {
+        const res = await fetch('/api/properties');
+        const data = await res.json();
+        setProperties(Array.isArray(data) ? data : data.properties || []);
+      } catch (err) {
+        console.error('Failed to fetch properties:', err);
+      }
+    };
+    fetchProperties();
   }, []);
 
   // Initialize scanner
@@ -80,10 +95,10 @@ const ScanPage = () => {
 
   const simulateVerification = (decodedText: string) => {
     // Try to match against property IDs, otherwise pick a random available property
-    let matchedProperty = demoProperties.find((p) => p.id === decodedText);
+    let matchedProperty = properties.find((p: any) => p.id === decodedText);
 
     if (!matchedProperty) {
-      const availableProperties = demoProperties.filter((p) => p.propertyData.status === 'available');
+      const availableProperties = properties.filter((p: any) => p.propertyData.status === 'available');
       matchedProperty = availableProperties[Math.floor(Math.random() * availableProperties.length)];
     }
 
@@ -125,7 +140,7 @@ const ScanPage = () => {
 
   const handleDemoScan = () => {
     setState('verifying');
-    const randomProperty = demoProperties[Math.floor(Math.random() * demoProperties.length)];
+    const randomProperty = properties[Math.floor(Math.random() * properties.length)];
     setVerificationSteps([
       { label: 'QR code decoded', status: 'done' },
       { label: 'Querying DUAL blockchain', status: 'pending' },

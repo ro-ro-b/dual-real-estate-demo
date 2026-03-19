@@ -1,17 +1,34 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { demoProperties } from '@/lib/demo-data';
+import type { Property } from '@/types';
 
 type FilterStatus = 'all' | 'available' | 'reserved' | 'sold';
 
 export default function PropertiesPage() {
   const [filter, setFilter] = useState<FilterStatus>('all');
+  const [properties, setProperties] = useState<Property[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const demoWallet = '0x742d35Cc6634C0532925a3b844Bc026e6f7D30f0';
 
-  const filteredProperties = demoProperties.filter((property) => {
+  useEffect(() => {
+    const fetchProperties = async () => {
+      try {
+        const res = await fetch('/api/properties');
+        const data = await res.json();
+        setProperties(Array.isArray(data) ? data : data.properties || []);
+      } catch (err) {
+        console.error('Failed to fetch properties:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProperties();
+  }, []);
+
+  const filteredProperties = properties.filter((property: any) => {
     if (filter === 'all') return true;
     return property.propertyData.status.toLowerCase() === filter;
   });
@@ -72,7 +89,7 @@ export default function PropertiesPage() {
       {/* Property Cards */}
       <div className="space-y-4 pb-6">
         {filteredProperties.length > 0 ? (
-          filteredProperties.map((property) => (
+          filteredProperties.map((property: any) => (
             <Link
               key={property.id}
               href={`/wallet/${property.id}`}

@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { demoTemplate } from '@/lib/demo-data';
+import { useState, useEffect } from 'react';
+import type { Template } from '@/types';
 
 export default function MintPropertyPage() {
   const [formData, setFormData] = useState({
@@ -19,7 +19,27 @@ export default function MintPropertyPage() {
     status: 'available' as const,
   });
 
+  const [template, setTemplate] = useState<Template | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTemplate = async () => {
+      try {
+        const res = await fetch('/api/templates');
+        const data = await res.json();
+        const templates = Array.isArray(data) ? data : data.templates || [];
+        if (templates.length > 0) {
+          setTemplate(templates[0]);
+        }
+      } catch (err) {
+        console.error('Failed to fetch template:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTemplate();
+  }, []);
 
   const handleChange = (field: string, value: string | number) => {
     setFormData((prev) => ({ ...prev, [field]: value }));

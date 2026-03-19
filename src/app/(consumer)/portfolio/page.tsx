@@ -1,13 +1,38 @@
 'use client';
 
 import Link from 'next/link';
-import { demoProperties, demoStats } from '@/lib/demo-data';
+import { useState, useEffect } from 'react';
+import type { Property, DashboardStats } from '@/types';
 
 export default function PortfolioPage() {
+  const [properties, setProperties] = useState<Property[]>([]);
+  const [stats, setStats] = useState<DashboardStats | null>(null);
+  const [loading, setLoading] = useState(true);
+
   const demoWallet = '0x742d35Cc6634C0532925a3b844Bc026e6f7D30f0';
 
-  const ownedProperties = demoProperties.filter(
-    (property) => property.ownerWallet === demoWallet
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [propertiesRes, statsRes] = await Promise.all([
+          fetch('/api/properties'),
+          fetch('/api/stats'),
+        ]);
+        const propertiesData = await propertiesRes.json();
+        const statsData = await statsRes.json();
+        setProperties(Array.isArray(propertiesData) ? propertiesData : propertiesData.properties || []);
+        setStats(statsData);
+      } catch (err) {
+        console.error('Failed to fetch data:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const ownedProperties = properties.filter(
+    (property: any) => property.ownerWallet === demoWallet
   );
 
   const portfolioValue = ownedProperties.reduce((sum, prop) => sum + prop.propertyData.price, 0);

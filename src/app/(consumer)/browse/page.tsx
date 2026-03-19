@@ -1,16 +1,33 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { demoProperties } from '@/lib/demo-data';
+import type { Property } from '@/types';
 
 type FilterCategory = 'all' | 'residential' | 'commercial' | 'land';
 
 export default function BrowsePage() {
   const [filter, setFilter] = useState<FilterCategory>('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [properties, setProperties] = useState<Property[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const filteredProperties = demoProperties.filter((property) => {
+  useEffect(() => {
+    const fetchProperties = async () => {
+      try {
+        const res = await fetch('/api/properties');
+        const data = await res.json();
+        setProperties(Array.isArray(data) ? data : data.properties || []);
+      } catch (err) {
+        console.error('Failed to fetch properties:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProperties();
+  }, []);
+
+  const filteredProperties = properties.filter((property: any) => {
     const matchesCategory = filter === 'all';
     const matchesSearch =
       property.propertyData.address.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -74,7 +91,7 @@ export default function BrowsePage() {
       {/* Property Grid */}
       <div className="space-y-4 pb-6">
         {filteredProperties.length > 0 ? (
-          filteredProperties.map((property) => (
+          filteredProperties.map((property: any) => (
             <Link
               key={property.id}
               href={`/browse/${property.id}`}

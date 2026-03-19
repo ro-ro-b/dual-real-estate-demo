@@ -1,14 +1,31 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
-import { demoProperties } from '@/lib/demo-data';
+import { useState, useEffect } from 'react';
+import type { Property } from '@/types';
 
 export default function AdminPropertiesPage() {
   const [statusFilter, setStatusFilter] = useState<'all' | 'available' | 'reserved' | 'sold'>('all');
   const [onChainFilter, setOnChainFilter] = useState<'all' | 'anchored' | 'pending' | 'failed'>('all');
+  const [properties, setProperties] = useState<Property[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const filteredProperties = demoProperties.filter((property) => {
+  useEffect(() => {
+    const fetchProperties = async () => {
+      try {
+        const res = await fetch('/api/properties');
+        const data = await res.json();
+        setProperties(Array.isArray(data) ? data : data.properties || []);
+      } catch (err) {
+        console.error('Failed to fetch properties:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProperties();
+  }, []);
+
+  const filteredProperties = properties.filter((property: any) => {
     const statusMatch = statusFilter === 'all' || property.propertyData.status === statusFilter;
     const onChainMatch = onChainFilter === 'all' || property.onChainStatus === onChainFilter;
     return statusMatch && onChainMatch;

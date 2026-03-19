@@ -1,10 +1,40 @@
 'use client';
 
 import Link from 'next/link';
-import { demoStats, demoActions, demoProperties } from '@/lib/demo-data';
+import { useState, useEffect } from 'react';
+import type { DashboardStats, Action, Property } from '@/types';
 
 export default function AdminPage() {
-  const recentActions = [...demoActions].sort((a, b) =>
+  const [stats, setStats] = useState<DashboardStats | null>(null);
+  const [actions, setActions] = useState<Action[]>([]);
+  const [properties, setProperties] = useState<Property[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [statsRes, actionsRes, propertiesRes] = await Promise.all([
+          fetch('/api/stats'),
+          fetch('/api/actions'),
+          fetch('/api/properties'),
+        ]);
+        const statsData = await statsRes.json();
+        const actionsData = await actionsRes.json();
+        const propertiesData = await propertiesRes.json();
+
+        setStats(statsData);
+        setActions(Array.isArray(actionsData) ? actionsData : actionsData.actions || []);
+        setProperties(Array.isArray(propertiesData) ? propertiesData : propertiesData.properties || []);
+      } catch (err) {
+        console.error('Failed to fetch data:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const recentActions = [...actions].sort((a: any, b: any) =>
     new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
   ).slice(0, 5);
 
@@ -15,6 +45,7 @@ export default function AdminPage() {
     PROPERTY_ANCHORING: { icon: 'local_offer', color: 'text-[#14b8a7]' },
   };
 
+  const demoStats = stats || { anchored: 0, totalProperties: 1, available: 0, totalValue: 0, totalValueChange: '+0%' };
   const anchoredCount = demoStats.anchored || 0;
   const totalCount = demoStats.totalProperties;
   const anchoredPercent = Math.round((anchoredCount / totalCount) * 100);
@@ -82,9 +113,9 @@ export default function AdminPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#14b8a7]/5">
-                  {recentActions.map((action) => {
+                  {recentActions.map((action: any) => {
                     const ai = actionIcons[action.type] || { icon: 'circle', color: 'text-slate-400' };
-                    const property = demoProperties.find((p) => p.id === action.objectId);
+                    const property = properties.find((p: any) => p.id === action.objectId);
                     const timeDiff = Date.now() - new Date(action.timestamp).getTime();
                     const daysAgo = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
                     const timeLabel = daysAgo === 0 ? 'Today' : daysAgo === 1 ? 'Yesterday' : `${daysAgo}d ago`;
@@ -184,7 +215,7 @@ export default function AdminPage() {
             <div className="h-full bg-[#14b8a7] rounded-full" style={{ width: `${anchoredPercent}%` }}></div>
           </div>
           <div className="grid grid-cols-8 gap-2 mt-4">
-            {demoProperties.map((p, i) => (
+            {properties.map((p: any, i: number) => (
               <div key={i} className={`h-1 rounded-full ${p.onChainStatus === 'anchored' ? 'bg-[#14b8a7]' : 'bg-slate-200'}`}></div>
             ))}
           </div>

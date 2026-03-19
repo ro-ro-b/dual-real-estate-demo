@@ -2,14 +2,32 @@
 
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { demoProperties } from '@/lib/demo-data';
+import { useState, useEffect } from 'react';
+import type { Property } from '@/types';
 
 export default function BrowsePropertyDetailPage() {
   const router = useRouter();
   const params = useParams();
   const propertyId = params.id as string;
+  const [property, setProperty] = useState<Property | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const property = demoProperties.find((p) => p.id === propertyId);
+  useEffect(() => {
+    const fetchProperty = async () => {
+      try {
+        const res = await fetch(`/api/properties/${propertyId}`);
+        if (res.ok) {
+          const data = await res.json();
+          setProperty(data);
+        }
+      } catch (err) {
+        console.error('Failed to fetch property:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProperty();
+  }, [propertyId]);
 
   if (!property) {
     return (

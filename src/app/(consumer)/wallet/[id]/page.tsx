@@ -2,15 +2,41 @@
 
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { demoProperties, demoActions } from '@/lib/demo-data';
+import { useState, useEffect } from 'react';
+import type { Property, Action } from '@/types';
 
 export default function PropertyDetailPage() {
   const router = useRouter();
   const params = useParams();
   const propertyId = params.id as string;
+  const [property, setProperty] = useState<Property | null>(null);
+  const [actions, setActions] = useState<Action[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const property = demoProperties.find((p) => p.id === propertyId);
-  const actions = demoActions.filter((a) => a.objectId === propertyId).slice(0, 5);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [propertyRes, actionsRes] = await Promise.all([
+          fetch(`/api/properties/${propertyId}`),
+          fetch(`/api/actions?objectId=${propertyId}`),
+        ]);
+        if (propertyRes.ok) {
+          const propertyData = await propertyRes.json();
+          setProperty(propertyData);
+        }
+        if (actionsRes.ok) {
+          const actionsData = await actionsRes.json();
+          const actionsList = Array.isArray(actionsData) ? actionsData : actionsData.actions || [];
+          setActions(actionsList.slice(0, 5));
+        }
+      } catch (err) {
+        console.error('Failed to fetch data:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [propertyId]);
 
   if (!property) {
     return (

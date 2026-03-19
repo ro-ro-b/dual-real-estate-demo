@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
-import { demoProperties, demoStats } from '@/lib/demo-data';
 import { StatsCards } from '@/components/properties/StatsCards';
 import { PropertyFilters } from '@/components/properties/PropertyFilters';
 import { PropertyCard } from '@/components/properties/PropertyCard';
+import type { DashboardStats, Property } from '@/types';
 
 type SortOption = 'price-asc' | 'price-desc' | 'newest' | 'oldest';
 type StatusFilter = 'all' | 'available' | 'reserved' | 'sold';
@@ -15,9 +15,34 @@ export default function PropertiesPage() {
   const [bedroomsFilter, setBedroomsFilter] = useState<number | 'all'>('all');
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 25000000]);
   const [sortBy, setSortBy] = useState<SortOption>('newest');
+  const [properties, setProperties] = useState<Property[]>([]);
+  const [stats, setStats] = useState<DashboardStats | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [propertiesRes, statsRes] = await Promise.all([
+          fetch('/api/properties'),
+          fetch('/api/stats'),
+        ]);
+        const propertiesData = await propertiesRes.json();
+        const statsData = await statsRes.json();
+        setProperties(Array.isArray(propertiesData) ? propertiesData : propertiesData.properties || []);
+        setStats(statsData);
+      } catch (err) {
+        console.error('Failed to fetch data:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const demoStats = stats || { anchored: 0, totalProperties: 1, available: 0, totalValue: 0, totalValueChange: '+0%' };
 
   const filteredAndSortedProperties = useMemo(() => {
-    let filtered = demoProperties.filter((property) => {
+    let filtered = properties.filter((property: any) => {
       if (statusFilter !== 'all' && property.propertyData.status !== statusFilter) return false;
       if (bedroomsFilter !== 'all' && property.propertyData.bedrooms < bedroomsFilter) return false;
       const { price } = property.propertyData;
@@ -61,7 +86,7 @@ export default function PropertiesPage() {
       {/* Properties Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {filteredAndSortedProperties.length > 0 ? (
-          filteredAndSortedProperties.map((property) => (
+          filteredAndSortedProperties.map((property: any) => (
             <PropertyCard key={property.id} property={property} />
           ))
         ) : (

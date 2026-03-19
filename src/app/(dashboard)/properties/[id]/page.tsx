@@ -1,15 +1,41 @@
 'use client';
 
 import Link from 'next/link';
-import { demoProperties, demoActions } from '@/lib/demo-data';
+import { useState, useEffect } from 'react';
+import type { Property, Action } from '@/types';
 
 export default function PropertyDetailPage({
   params,
 }: {
   params: { id: string };
 }) {
-  const property = demoProperties.find((p) => p.id === params.id);
-  const propertyActions = demoActions.filter((a) => a.objectId === params.id);
+  const [property, setProperty] = useState<Property | null>(null);
+  const [propertyActions, setPropertyActions] = useState<Action[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [propertyRes, actionsRes] = await Promise.all([
+          fetch(`/api/properties/${params.id}`),
+          fetch(`/api/actions?objectId=${params.id}`),
+        ]);
+        if (propertyRes.ok) {
+          const propertyData = await propertyRes.json();
+          setProperty(propertyData);
+        }
+        if (actionsRes.ok) {
+          const actionsData = await actionsRes.json();
+          setPropertyActions(Array.isArray(actionsData) ? actionsData : actionsData.actions || []);
+        }
+      } catch (err) {
+        console.error('Failed to fetch data:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [params.id]);
 
   if (!property) {
     return (
