@@ -76,7 +76,7 @@ export default function AdminPage() {
           { title: 'Active Listings', value: String(demoStats.available), icon: 'list_alt', trend: '+5%', up: true },
           { title: 'Total Volume', value: `$${(demoStats.totalValue / 1000000).toFixed(1)}M`, icon: 'payments', trend: demoStats.totalValueChange, up: true },
           { title: 'Avg. Price', value: `$${(demoStats.totalValue / demoStats.totalProperties / 1000).toFixed(1)}K`, icon: 'equalizer', trend: '+8%', up: true },
-        ].map((card) => (
+        ].map((card: any) => (
           <div key={card.title} className="bg-white rounded-xl p-6 border border-[#14b8a7]/10 shadow-sm hover:border-[#14b8a7]/30 transition-all">
             <div className="flex justify-between items-start mb-4">
               <p className="text-slate-500 text-sm font-medium">{card.title}</p>
@@ -160,7 +160,7 @@ export default function AdminPage() {
               { title: 'Manage Templates', icon: 'auto_awesome_motion', href: '#' },
               { title: 'Configure Webhooks', icon: 'settings_ethernet', href: '#' },
               { title: 'Sequencer Status', icon: 'lan', href: '#' },
-            ].map((item) => (
+            ].map((item: any) => (
               <Link key={item.title} href={item.href}>
                 <div className="bg-white p-5 rounded-xl border border-[#14b8a7]/10 shadow-sm hover:shadow-md transition-all cursor-pointer group flex flex-col items-center text-center">
                   <div className="bg-[#14b8a7]/10 p-3 rounded-full mb-3 group-hover:bg-[#14b8a7] group-hover:text-white transition-all">

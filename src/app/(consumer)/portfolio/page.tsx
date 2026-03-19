@@ -35,13 +35,13 @@ export default function PortfolioPage() {
     (property: any) => property.ownerWallet === demoWallet
   );
 
-  const portfolioValue = ownedProperties.reduce((sum, prop) => sum + prop.propertyData.price, 0);
+  const portfolioValue = ownedProperties.reduce((sum: any, prop) => sum + prop.propertyData.price, 0);
   const valueChange = 12.4; // percentage
 
   const propertyStatuses = {
-    available: ownedProperties.filter((p) => p.propertyData.status.toLowerCase() === 'available').length,
-    reserved: ownedProperties.filter((p) => p.propertyData.status.toLowerCase() === 'reserved').length,
-    sold: ownedProperties.filter((p) => p.propertyData.status.toLowerCase() === 'sold').length,
+    available: ownedProperties.filter((p: any) => p.propertyData.status.toLowerCase() === 'available').length,
+    reserved: ownedProperties.filter((p: any) => p.propertyData.status.toLowerCase() === 'reserved').length,
+    sold: ownedProperties.filter((p: any) => p.propertyData.status.toLowerCase() === 'sold').length,
   };
 
   const statusBadgeColor = (status: string) => {
@@ -117,7 +117,7 @@ export default function PortfolioPage() {
         <h2 className="text-lg font-semibold text-slate-900 mb-4">Your Properties</h2>
         {ownedProperties.length > 0 ? (
           <div className="space-y-3 pb-6">
-            {ownedProperties.map((property) => (
+            {ownedProperties.map((property: any) => (
               <Link
                 key={property.id}
                 href={`/wallet/${property.id}`}

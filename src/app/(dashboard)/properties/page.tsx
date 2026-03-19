@@ -50,7 +50,7 @@ export default function PropertiesPage() {
       return true;
     });
 
-    return [...filtered].sort((a, b) => {
+    return [...filtered].sort((a: any, b: any) => {
       const priceA = a.propertyData.price;
       const priceB = b.propertyData.price;
       const dateA = new Date(a.createdAt).getTime();

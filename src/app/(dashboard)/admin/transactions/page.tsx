@@ -100,7 +100,7 @@ export default function TransactionsPage() {
 
       {/* Filters */}
       <div className="mb-6 flex gap-2 flex-wrap">
-        {(['all', 'completed', 'pending', 'failed'] as const).map((filter) => (
+        {(['all', 'completed', 'pending', 'failed'] as const).map((filter: any) => (
           <button
             key={filter}
             onClick={() => setStatusFilter(filter)}

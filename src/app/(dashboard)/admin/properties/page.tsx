@@ -121,7 +121,7 @@ export default function AdminPropertiesPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-[#14b8a7]/5">
-              {filteredProperties.map((property) => (
+              {filteredProperties.map((property: any) => (
                 <tr key={property.id} className="hover:bg-[#14b8a7]/5 transition-colors">
                   <td className="px-5 py-4">
                     <img

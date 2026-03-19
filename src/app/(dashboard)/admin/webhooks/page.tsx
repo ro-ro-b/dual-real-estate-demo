@@ -117,7 +117,7 @@ export default function WebhooksPage() {
               </div>
             </div>
           ) : (
-            events.map((event) => {
+            events.map((event: any) => {
               const time = new Date(event.timestamp).toLocaleTimeString();
               return (
                 <div

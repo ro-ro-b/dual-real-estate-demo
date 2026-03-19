@@ -164,7 +164,7 @@ export default function PropertyDetailPage({
               </h3>
               <div className="relative space-y-8 before:absolute before:inset-0 before:ml-5 before:h-full before:w-0.5 before:bg-[#14b8a7]/10">
                 {propertyActions.length > 0 ? (
-                  propertyActions.map((action) => {
+                  propertyActions.map((action: any) => {
                     const ai = activityIcons[action.type] || { icon: 'circle', color: 'bg-slate-400' };
                     return (
                       <div key={action.id} className="relative flex items-center gap-6">
@@ -243,7 +243,7 @@ export default function PropertyDetailPage({
               <div className="bg-white border border-[#14b8a7]/10 rounded-xl p-5 shadow-sm">
                 <p className="text-slate-500 text-xs uppercase font-bold tracking-wider mb-4">Asset Faces</p>
                 <div className="space-y-3">
-                  {faces.map((face) => (
+                  {faces.map((face: any) => (
                     <div key={face.id} className="flex items-center gap-3">
                       <span className={`px-2 py-1 text-[10px] font-bold rounded uppercase ${face.type === 'image' ? 'bg-blue-100 text-blue-700' : 'bg-purple-100 text-purple-700'}`}>
                         {face.type}

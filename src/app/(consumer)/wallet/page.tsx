@@ -71,7 +71,7 @@ export default function PropertiesPage() {
 
       {/* Filter Pills */}
       <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
-        {(['all', 'available', 'reserved', 'sold'] as FilterStatus[]).map((status) => (
+        {(['all', 'available', 'reserved', 'sold'] as FilterStatus[]).map((status: any) => (
           <button
             key={status}
             onClick={() => setFilter(status)}
