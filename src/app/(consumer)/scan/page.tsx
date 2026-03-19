@@ -138,17 +138,6 @@ const ScanPage = () => {
     }, 3500);
   };
 
-  const handleDemoScan = () => {
-    setState('verifying');
-    const randomProperty = properties[Math.floor(Math.random() * properties.length)];
-    setVerificationSteps([
-      { label: 'QR code decoded', status: 'done' },
-      { label: 'Querying DUAL blockchain', status: 'pending' },
-      { label: 'Validating title deed', status: 'pending' },
-      { label: 'Confirming ownership chain', status: 'pending' },
-    ]);
-    simulateVerification(randomProperty.id);
-  };
 
   const handleRetry = () => {
     setState('scanning');
@@ -254,13 +243,7 @@ const ScanPage = () => {
 
           {/* Bottom Instructions */}
           <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950 to-transparent p-6 z-20">
-            <p className="text-center text-wine-300 mb-6">Point camera at property title deed QR code</p>
-            <button
-              onClick={handleDemoScan}
-              className="w-full px-6 py-3 wine-gradient text-white rounded-lg font-semibold hover:opacity-90 transition-opacity"
-            >
-              Demo: Simulate Scan
-            </button>
+            <p className="text-center text-wine-300">Point camera at property title deed QR code</p>
           </div>
 
           {/* CSS for scanning animation */}

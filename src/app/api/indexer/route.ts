@@ -2,7 +2,7 @@ export const dynamic = 'force-dynamic';
 
 /**
  * Public indexer endpoint - no auth required
- * Queries DUAL indexer or falls back to demo data
+ * Queries DUAL indexer for objects using the DUAL SDK
  */
 
 import { NextRequest, NextResponse } from 'next/server';

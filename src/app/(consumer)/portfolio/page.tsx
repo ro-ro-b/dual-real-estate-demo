@@ -9,8 +9,6 @@ export default function PortfolioPage() {
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const demoWallet = '0x742d35Cc6634C0532925a3b844Bc026e6f7D30f0';
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -31,9 +29,7 @@ export default function PortfolioPage() {
     fetchData();
   }, []);
 
-  const ownedProperties = properties.filter(
-    (property: any) => property.ownerWallet === demoWallet
-  );
+  const ownedProperties = properties;
 
   const portfolioValue = ownedProperties.reduce((sum: any, prop) => sum + prop.propertyData.price, 0);
   const valueChange = 12.4; // percentage

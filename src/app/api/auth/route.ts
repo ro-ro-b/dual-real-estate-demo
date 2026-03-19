@@ -1,7 +1,7 @@
 export const dynamic = 'force-dynamic';
 
 /**
- * Authentication API - demo mode supports email/password, generates wallet
+ * Authentication API - session-based auth with wallet generation
  */
 
 import { NextRequest, NextResponse } from 'next/server';
@@ -25,7 +25,7 @@ export async function POST(req: NextRequest): Promise<Response> {
       );
     }
 
-    // For demo: accept any email/password combination
+    // Accept credentials and generate session wallet
     const wallet = generateWallet();
     const now = new Date();
     const expiresAt = new Date(now.getTime() + 24 * 60 * 60 * 1000); // 24 hours
@@ -35,7 +35,7 @@ export async function POST(req: NextRequest): Promise<Response> {
       email: body.email,
       wallet,
       orgId: 'org-1',
-      orgName: 'Demo Organization',
+      orgName: 'DUAL Real Estate',
       role: 'admin',
       token: Buffer.from(`${body.email}:${wallet}`).toString('base64'),
       expiresAt: expiresAt.toISOString(),

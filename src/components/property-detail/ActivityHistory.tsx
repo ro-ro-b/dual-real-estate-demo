@@ -1,4 +1,4 @@
-import { Action } from '@/lib/demo-data';
+import { Action } from '@/types';
 import { Activity } from 'lucide-react';
 
 interface ActivityHistoryProps {

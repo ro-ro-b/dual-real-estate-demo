@@ -1,5 +1,5 @@
 import { MapPin, Calendar } from 'lucide-react';
-import { PropertyData } from '@/lib/demo-data';
+import { PropertyData } from '@/types';
 
 interface PropertyDetailsProps {
   propertyData: PropertyData;
@@ -61,10 +61,12 @@ export function PropertyDetails({ propertyData }: PropertyDetailsProps) {
           </div>
         </div>
 
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <Calendar className="w-4 h-4" />
-          <span>Listed on {propertyData.listingDate}</span>
-        </div>
+        {propertyData.yearBuilt > 0 && (
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <Calendar className="w-4 h-4" />
+            <span>Built in {propertyData.yearBuilt}</span>
+          </div>
+        )}
       </div>
     </div>
   );

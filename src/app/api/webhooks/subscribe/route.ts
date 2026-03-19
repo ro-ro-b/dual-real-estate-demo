@@ -6,34 +6,24 @@ export const dynamic = 'force-dynamic';
 
 import { NextRequest, NextResponse } from 'next/server';
 import { dualClient } from '@/lib/dual-client';
-import { isDualConfigured } from '@/lib/env';
 import { Webhook, WebhookEventType, ApiResponse } from '@/types';
-
-// Mock webhooks for demo
-const demoWebhooks: Webhook[] = [];
 
 export async function GET(): Promise<Response> {
   try {
-    if (isDualConfigured()) {
-      const webhooks = await dualClient.listWebhooks();
-      return NextResponse.json<ApiResponse<Webhook[]>>({
-        success: true,
-        data: webhooks,
-      });
-    } else {
-      return NextResponse.json<ApiResponse<Webhook[]>>({
-        success: true,
-        data: demoWebhooks,
-      });
-    }
+    const webhooks = await dualClient.listWebhooks();
+    return NextResponse.json<ApiResponse<Webhook[]>>({
+      success: true,
+      data: webhooks,
+    });
   } catch (error) {
     console.error('Failed to list webhooks:', error);
     return NextResponse.json<ApiResponse<Webhook[]>>(
       {
-        success: true,
-        data: demoWebhooks,
+        success: false,
+        error: 'Failed to list webhooks',
+        data: [],
       },
-      { status: 200 }
+      { status: 500 }
     );
   }
 }
@@ -68,28 +58,11 @@ export async function POST(req: NextRequest): Promise<Response> {
       );
     }
 
-    if (isDualConfigured()) {
-      const webhook = await dualClient.subscribeWebhook(body.url, body.events);
-      return NextResponse.json<ApiResponse<Webhook>>({
-        success: true,
-        data: webhook,
-      });
-    } else {
-      const newWebhook: Webhook = {
-        id: `webhook-${Date.now()}`,
-        url: body.url,
-        events: body.events,
-        orgId: 'demo-org',
-        active: true,
-        createdAt: new Date().toISOString(),
-      };
-      demoWebhooks.push(newWebhook);
-
-      return NextResponse.json<ApiResponse<Webhook>>({
-        success: true,
-        data: newWebhook,
-      });
-    }
+    const webhook = await dualClient.subscribeWebhook(body.url, body.events);
+    return NextResponse.json<ApiResponse<Webhook>>({
+      success: true,
+      data: webhook,
+    });
   } catch (error) {
     console.error('Failed to subscribe webhook:', error);
     return NextResponse.json<ApiResponse<Webhook>>(

@@ -1,8 +1,8 @@
-import { Face } from '@/lib/demo-data';
+import type { Property } from '@/types';
 import { Image } from 'lucide-react';
 
 interface FacesCardProps {
-  faces: Face[];
+  faces: Property['faces'];
 }
 
 export function FacesCard({ faces }: FacesCardProps) {
@@ -17,14 +17,14 @@ export function FacesCard({ faces }: FacesCardProps) {
         <p className="text-sm text-muted-foreground">No faces attached</p>
       ) : (
         <div className="space-y-3">
-          {faces.map((face) => (
-            <div key={face.id} className="border rounded-lg p-3">
+          {faces.map((face, index) => (
+            <div key={`${face.type}-${index}`} className="border rounded-lg p-3">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs font-semibold bg-blue-100 text-blue-800 px-2 py-1 rounded">
                   {face.type}
                 </span>
               </div>
-              <p className="text-xs text-muted-foreground break-all">{face.id}</p>
+              <p className="text-xs text-muted-foreground break-all">{face.url}</p>
             </div>
           ))}
         </div>

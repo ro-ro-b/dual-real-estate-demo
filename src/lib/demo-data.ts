@@ -1,4 +1,7 @@
-// Type definitions for DUAL network data
+// DEPRECATED: Type definitions have been moved to src/types/dual.ts
+// This file is maintained for backward compatibility only.
+// All type definitions should be imported from @/types instead.
+//
 // Demo data has been removed - all data comes from DUAL gateway only
 
 export interface PropertyData {

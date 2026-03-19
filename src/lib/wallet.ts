@@ -72,6 +72,6 @@ export function signTypedData(
   _message: Record<string, unknown>
 ): string {
   // TODO: Implement EIP-712 signing with ethers/web3.js
-  // For now return mock signature
+  // Placeholder - requires web3 provider for real signing
   return '0x' + 'a'.repeat(130); // 65 bytes (130 hex chars)
 }

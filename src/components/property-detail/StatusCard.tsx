@@ -1,4 +1,4 @@
-import { Property } from '@/lib/demo-data';
+import { Property } from '@/types';
 import { CheckCircle, Clock, XCircle } from 'lucide-react';
 
 interface StatusCardProps {
@@ -12,14 +12,15 @@ export function StatusCard({ property }: StatusCardProps) {
     sold: { label: 'Sold', color: 'bg-gray-100 text-gray-800', icon: XCircle },
   };
 
-  const chainStatusInfo = {
-    anchored: { label: 'Anchored', color: 'bg-green-50 border-green-200' },
+  const chainStatusInfo: Record<string, { label: string; color: string }> = {
+    anchored: { label: 'Anchored', color: 'bg-gold-50 border-gold-200' },
     pending: { label: 'Pending Anchoring', color: 'bg-yellow-50 border-yellow-200' },
     failed: { label: 'Anchor Failed', color: 'bg-red-50 border-red-200' },
+    none: { label: 'Not Anchored', color: 'bg-slate-50 border-slate-200' },
   };
 
-  const status = statusInfo[property.propertyData.status];
-  const chainStatus = chainStatusInfo[property.onChainStatus];
+  const status = statusInfo[property.propertyData.status] || statusInfo.available;
+  const chainStatus = chainStatusInfo[property.onChainStatus] || chainStatusInfo.none;
   const StatusIcon = status.icon;
 
   return (

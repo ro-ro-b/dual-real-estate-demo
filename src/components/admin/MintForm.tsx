@@ -1,4 +1,4 @@
-import { Template } from '@/lib/demo-data';
+import { Template } from '@/types';
 
 interface MintFormProps {
   formData: any;
