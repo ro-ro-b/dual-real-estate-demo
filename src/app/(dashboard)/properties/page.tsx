@@ -66,8 +66,35 @@ export default function PropertiesPage() {
     });
   }, [statusFilter, bedroomsFilter, priceRange, sortBy]);
 
+  const anchoredCount = properties.filter((p: any) => p.onChainStatus === 'anchored').length;
+
   return (
     <>
+      {/* DUAL Network Header Banner */}
+      <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border border-slate-700/50 rounded-2xl p-8 mb-8 shadow-xl">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <h1 className="text-3xl md:text-4xl font-bold text-slate-100 mb-2 flex items-center gap-3">
+              <span className="text-emerald-500 font-mono text-2xl">◆</span>
+              DUAL Network
+            </h1>
+            <p className="text-slate-400 font-mono text-sm">
+              {filteredAndSortedProperties.length} Property Tokens · {anchoredCount} Anchored on BLOCKv · Verified
+            </p>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="bg-slate-950/50 border border-slate-700/50 rounded-xl p-4 text-center">
+              <p className="text-xs font-mono uppercase tracking-widest text-slate-500 mb-1">Total Tokens</p>
+              <p className="text-2xl font-bold text-emerald-400">{properties.length}</p>
+            </div>
+            <div className="bg-slate-950/50 border border-slate-700/50 rounded-xl p-4 text-center">
+              <p className="text-xs font-mono uppercase tracking-widest text-slate-500 mb-1">Anchored</p>
+              <p className="text-2xl font-bold text-emerald-400">{anchoredCount}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Stats Row */}
       <StatsCards stats={demoStats} />
 
@@ -84,7 +111,7 @@ export default function PropertiesPage() {
       />
 
       {/* Properties Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredAndSortedProperties.length > 0 ? (
           filteredAndSortedProperties.map((property: any) => (
             <PropertyCard key={property.id} property={property} />
