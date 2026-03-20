@@ -22,7 +22,7 @@ export default function AdminPage() {
         const actionsData = await actionsRes.json();
         const propertiesData = await propertiesRes.json();
 
-        setStats(statsData);
+        setStats(statsData?.data || statsData);
         setActions(Array.isArray(actionsData) ? actionsData : actionsData.actions || []);
         setProperties(Array.isArray(propertiesData) ? propertiesData : propertiesData.properties || []);
       } catch (err) {
@@ -72,10 +72,10 @@ export default function AdminPage() {
       {/* Stats Row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mb-10">
         {[
-          { title: 'Total Properties', value: String(displayStats.totalProperties), icon: 'domain', trend: '+12%', up: true },
-          { title: 'Active Listings', value: String(displayStats.available), icon: 'list_alt', trend: '+5%', up: true },
-          { title: 'Total Volume', value: `$${(displayStats.totalValue / 1000000).toFixed(1)}M`, icon: 'payments', trend: displayStats.totalValueChange, up: true },
-          { title: 'Avg. Price', value: `$${(displayStats.totalValue / displayStats.totalProperties / 1000).toFixed(1)}K`, icon: 'equalizer', trend: '+8%', up: true },
+          { title: 'Total Properties', value: String(displayStats.totalProperties), icon: 'domain', trend: `${anchoredCount} anchored`, up: anchoredCount > 0 },
+          { title: 'Active Listings', value: String(displayStats.available), icon: 'list_alt', trend: displayStats.available > 0 ? 'Live' : '—', up: displayStats.available > 0 },
+          { title: 'Total Volume', value: displayStats.totalValue > 0 ? `$${(displayStats.totalValue / 1000000).toFixed(1)}M` : '$0', icon: 'payments', trend: displayStats.totalValueChange || '—', up: displayStats.totalValue > 0 },
+          { title: 'Avg. Price', value: displayStats.totalValue > 0 ? `$${(displayStats.totalValue / displayStats.totalProperties / 1000).toFixed(1)}K` : '$0', icon: 'equalizer', trend: '—', up: false },
         ].map((card: any) => (
           <div key={card.title} className="bg-white rounded-xl p-6 border border-wine-100 shadow-sm hover:border-wine-300 transition-all">
             <div className="flex justify-between items-start mb-4">
@@ -203,7 +203,7 @@ export default function AdminPage() {
               <span className="size-2 bg-gold-500 rounded-full"></span>
               <span className="text-xs font-bold uppercase tracking-tight">Healthy</span>
             </div>
-            <div className="text-xs font-mono text-slate-400">Latency: 12ms</div>
+            <div className="text-xs font-mono text-slate-400">DUAL Network</div>
           </div>
         </div>
         <div className="space-y-4">
@@ -220,8 +220,8 @@ export default function AdminPage() {
             ))}
           </div>
           <div className="flex justify-between items-center pt-2">
-            <p className="text-[10px] text-slate-400">Last Block: #19,482,102</p>
-            <p className="text-[10px] text-slate-400">Est. completion: 4m 12s</p>
+            <p className="text-[10px] text-slate-400">Explorer: 32f.blockv.io</p>
+            <p className="text-[10px] text-slate-400">{anchoredCount} of {totalCount} anchored</p>
           </div>
         </div>
       </div>

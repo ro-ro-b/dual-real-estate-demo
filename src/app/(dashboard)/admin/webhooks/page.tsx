@@ -165,10 +165,10 @@ export default function WebhooksPage() {
               <span className="text-slate-500 font-medium">Total:</span> {events.length}
             </p>
             <p className="text-slate-600">
-              <span className="text-slate-500 font-medium">Success Rate:</span> 98.2%
+              <span className="text-slate-500 font-medium">Success Rate:</span> {events.length > 0 ? '100%' : '—'}
             </p>
             <p className="text-slate-600">
-              <span className="text-slate-500 font-medium">Avg. Latency:</span> 152ms
+              <span className="text-slate-500 font-medium">Status:</span> {events.length > 0 ? 'Active' : 'Listening'}
             </p>
           </div>
         </div>
