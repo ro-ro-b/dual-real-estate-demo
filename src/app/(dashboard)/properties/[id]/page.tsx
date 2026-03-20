@@ -52,8 +52,12 @@ export default function PropertyDetailPage({
     );
   }
 
-  const { propertyData, faces, onChainStatus, ownerWallet, templateName } = property;
-  const imageUrl = faces.length > 0 ? faces[0].url : 'https://dual-docs-gray.vercel.app/assets/products/property-token.svg';
+  const propertyData = property.propertyData;
+  const onChainStatus = property.onChainStatus || property.status || 'pending';
+  const ownerWallet = property.ownerWallet || (property as any).owner || '';
+  const templateName = property.templateName || property.templateId || '';
+  const faces = property.faces || [];
+  const imageUrl = faces.length > 0 ? faces[0].url : (propertyData?.imageUrl || '/placeholder-property.svg');
 
   const statusConfig: Record<string, { bg: string; textColor: string; label: string }> = {
     available: { bg: 'bg-gold-50', textColor: 'text-gold-800', label: 'Available' },
@@ -273,7 +277,7 @@ export default function PropertyDetailPage({
             <p className="text-xs font-mono uppercase tracking-widest text-slate-500 mb-4">Owner</p>
             <div className="space-y-3">
               <code className="block font-mono text-gold-400 text-xs break-all bg-slate-950 p-3 rounded-lg border border-slate-700/50">
-                {property.ownerWallet}
+                {ownerWallet}
               </code>
               {property.explorerLinks?.owner && (
                 <a
