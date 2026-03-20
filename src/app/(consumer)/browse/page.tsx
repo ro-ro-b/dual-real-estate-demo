@@ -100,7 +100,7 @@ export default function BrowsePage() {
               {/* Image */}
               <div className="relative w-full h-48 bg-slate-200 overflow-hidden">
                 <img
-                  src={property.faces[0]?.url || 'https://images.unsplash.com/photo-1512917774080-9b274b3057b7?w=1000&h=667&fit=crop'}
+                  src={property.propertyData?.imageUrl || '/placeholder-property.svg'}
                   alt={property.propertyData.address}
                   className="w-full h-full object-cover hover:scale-105 transition-transform"
                 />

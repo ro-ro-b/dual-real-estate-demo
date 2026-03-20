@@ -216,7 +216,7 @@ export default function AdminPage() {
           </div>
           <div className="grid grid-cols-8 gap-2 mt-4">
             {properties.map((p: any, i: number) => (
-              <div key={i} className={`h-1 rounded-full ${p.onChainStatus === 'anchored' ? 'bg-gold-500' : 'bg-slate-200'}`}></div>
+              <div key={i} className={`h-1 rounded-full ${(p.onChainStatus || p.status || 'pending') === 'anchored' ? 'bg-gold-500' : 'bg-slate-200'}`}></div>
             ))}
           </div>
           <div className="flex justify-between items-center pt-2">

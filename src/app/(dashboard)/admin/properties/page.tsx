@@ -26,8 +26,9 @@ export default function AdminPropertiesPage() {
   }, []);
 
   const filteredProperties = properties.filter((property: any) => {
-    const statusMatch = statusFilter === 'all' || property.propertyData.status === statusFilter;
-    const onChainMatch = onChainFilter === 'all' || property.onChainStatus === onChainFilter;
+    const statusMatch = statusFilter === 'all' || property.propertyData?.status === statusFilter;
+    const chainStatus = property.onChainStatus || property.status || 'pending';
+    const onChainMatch = onChainFilter === 'all' || chainStatus === onChainFilter;
     return statusMatch && onChainMatch;
   });
 
@@ -121,55 +122,59 @@ export default function AdminPropertiesPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-wine-100/50">
-              {filteredProperties.map((property: any) => (
-                <tr key={property.id} className="hover:bg-wine-50/50 transition-colors">
-                  <td className="px-5 py-4">
-                    <img
-                      src={property.faces[0]?.url}
-                      alt={property.propertyData.address}
-                      className="w-12 h-12 rounded-lg object-cover"
-                    />
-                  </td>
-                  <td className="px-5 py-4 text-sm font-medium text-slate-900">
-                    {property.propertyData.address.split(',')[0]}
-                  </td>
-                  <td className="px-5 py-4 text-sm text-slate-600">{property.propertyData.city}</td>
-                  <td className="px-5 py-4 text-sm font-semibold text-slate-900">
-                    ${(property.propertyData.price / 1000000).toFixed(2)}M
-                  </td>
-                  <td className="px-5 py-4">
-                    <span
-                      className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase ${getStatusColor(
-                        property.propertyData.status
-                      )}`}
-                    >
-                      {property.propertyData.status}
-                    </span>
-                  </td>
-                  <td className="px-5 py-4">
-                    <span
-                      className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase ${getOnChainColor(
-                        property.onChainStatus
-                      )}`}
-                    >
-                      {property.onChainStatus}
-                    </span>
-                  </td>
-                  <td className="px-5 py-4">
-                    <div className="flex items-center gap-2">
-                      <Link
-                        href={`/properties/${property.id}`}
-                        className="text-primary-consumer hover:text-wine-700 text-xs font-bold transition-colors"
+              {filteredProperties.map((property: any) => {
+                const imageUrl = property.faces?.[0]?.url || property.propertyData?.imageUrl || '/placeholder-property.svg';
+                const chainStatus = property.onChainStatus || property.status || 'pending';
+                const price = property.propertyData?.price || 0;
+                return (
+                  <tr key={property.id} className="hover:bg-wine-50/50 transition-colors">
+                    <td className="px-5 py-4">
+                      <div className="w-12 h-12 rounded-lg bg-slate-100 flex items-center justify-center overflow-hidden">
+                        {imageUrl.startsWith('/placeholder') ? (
+                          <span className="material-symbols-outlined text-slate-400">domain</span>
+                        ) : (
+                          <img src={imageUrl} alt={property.propertyData?.address || 'Property'} className="w-12 h-12 rounded-lg object-cover" />
+                        )}
+                      </div>
+                    </td>
+                    <td className="px-5 py-4 text-sm font-medium text-slate-900">
+                      {(property.propertyData?.address || 'Untitled').split(',')[0]}
+                    </td>
+                    <td className="px-5 py-4 text-sm text-slate-600">{property.propertyData?.city || '—'}</td>
+                    <td className="px-5 py-4 text-sm font-semibold text-slate-900">
+                      {price > 0 ? `$${(price / 1000000).toFixed(2)}M` : '—'}
+                    </td>
+                    <td className="px-5 py-4">
+                      <span
+                        className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase ${getStatusColor(
+                          property.propertyData?.status || 'available'
+                        ) || 'bg-slate-100 text-slate-700'}`}
                       >
-                        View
-                      </Link>
-                      <button className="text-slate-400 hover:text-slate-600 text-xs font-bold transition-colors">
-                        Edit
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
+                        {property.propertyData?.status || 'available'}
+                      </span>
+                    </td>
+                    <td className="px-5 py-4">
+                      <span
+                        className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase ${getOnChainColor(
+                          chainStatus
+                        ) || 'bg-slate-100 text-slate-700'}`}
+                      >
+                        {chainStatus}
+                      </span>
+                    </td>
+                    <td className="px-5 py-4">
+                      <div className="flex items-center gap-2">
+                        <Link
+                          href={`/properties/${property.id}`}
+                          className="text-primary-consumer hover:text-wine-700 text-xs font-bold transition-colors"
+                        >
+                          View
+                        </Link>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>

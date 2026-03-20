@@ -20,7 +20,7 @@ export function StatusCard({ property }: StatusCardProps) {
   };
 
   const status = statusInfo[property.propertyData.status] || statusInfo.available;
-  const chainStatus = chainStatusInfo[property.onChainStatus] || chainStatusInfo.none;
+  const chainStatus = chainStatusInfo[property.onChainStatus || property.status || 'pending'] || chainStatusInfo.none;
   const StatusIcon = status.icon;
 
   return (

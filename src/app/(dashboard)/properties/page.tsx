@@ -66,7 +66,7 @@ export default function PropertiesPage() {
     });
   }, [statusFilter, bedroomsFilter, priceRange, sortBy]);
 
-  const anchoredCount = properties.filter((p: any) => p.onChainStatus === 'anchored').length;
+  const anchoredCount = properties.filter((p: any) => (p.onChainStatus || p.status || 'pending') === 'anchored').length;
 
   return (
     <>

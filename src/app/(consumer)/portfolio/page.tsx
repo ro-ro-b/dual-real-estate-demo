@@ -122,7 +122,7 @@ export default function PortfolioPage() {
                 <div className="flex items-start gap-4">
                   <div className="w-16 h-16 bg-slate-200 rounded-lg overflow-hidden flex-shrink-0">
                     <img
-                      src={property.faces[0]?.url || 'https://images.unsplash.com/photo-1512917774080-9b274b3057b7?w=1000&h=667&fit=crop'}
+                      src={property.propertyData?.imageUrl || '/placeholder-property.svg'}
                       alt={property.propertyData.address}
                       className="w-full h-full object-cover"
                     />
