@@ -9,7 +9,7 @@ export default function PropertyDetailPage() {
   const router = useRouter();
   const params = useParams();
   const propertyId = params.id as string;
-  const [property, setProperty] = useState<Property | null>(null);
+  const [property, setProperty] = useState<(Property & { provenance?: any; contentHash?: string; integrityHash?: string }) | null>(null);
   const [actions, setActions] = useState<Action[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -37,6 +37,15 @@ export default function PropertyDetailPage() {
     };
     fetchData();
   }, [propertyId]);
+
+  if (loading) {
+    return (
+      <div className="px-4 pt-6 text-center py-24">
+        <div className="w-8 h-8 rounded-full border-2 border-primary-consumer border-t-transparent animate-spin mx-auto mb-4" />
+        <p className="text-slate-500">Loading property...</p>
+      </div>
+    );
+  }
 
   if (!property) {
     return (
@@ -152,7 +161,7 @@ export default function PropertyDetailPage() {
         {/* Owner Info */}
         <div className="p-4 bg-white rounded-2xl border border-slate-100 shadow-sm">
           <p className="text-xs text-slate-500 uppercase tracking-wide font-semibold mb-2">Owner</p>
-          <p className="font-mono text-sm text-slate-900">{truncateWallet(property.ownerWallet)}</p>
+          <p className="font-mono text-sm text-slate-900">{truncateWallet(property.ownerWallet || '')}</p>
         </div>
 
         {/* On-Chain Status */}
@@ -164,15 +173,19 @@ export default function PropertyDetailPage() {
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
               <span className="text-slate-600">Chain:</span>
-              <span className="font-semibold text-slate-900">Ethereum Sepolia</span>
+              <span className="font-semibold text-slate-900">{property.provenance?.chain || 'BLOCKv EVM'}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-slate-600">Hash:</span>
-              <span className="font-mono text-xs text-slate-900">0x{generateChainHash().slice(0, 16)}...</span>
+              <span className="text-slate-600">Content Hash:</span>
+              <span className="font-mono text-xs text-slate-900">{property.contentHash ? `${property.contentHash.slice(0, 18)}...` : 'Pending'}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-slate-600">Confirmations:</span>
-              <span className="font-semibold text-gold-600">{generateConfirmations()} confirmed</span>
+              <span className="text-slate-600">Integrity Hash:</span>
+              <span className="font-mono text-xs text-slate-900">{property.integrityHash ? `${property.integrityHash.slice(0, 18)}...` : 'Pending'}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-slate-600">Status:</span>
+              <span className="font-semibold text-gold-600">{property.provenance?.verified ? 'Verified on-chain' : 'Pending'}</span>
             </div>
           </div>
         </div>

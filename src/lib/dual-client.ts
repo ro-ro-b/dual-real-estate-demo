@@ -42,7 +42,12 @@ function mapGatewayToProperty(obj: any): any {
     objectId: obj.id || '',
     templateId: obj.template_id || '',
     status: obj.content_hash ? 'anchored' : 'draft',
+    onChainStatus: obj.content_hash ? 'anchored' : 'pending',
     owner: obj.owner || '',
+    ownerWallet: obj.owner || '',
+    orgId: obj.org_id || '',
+    data: { ...m, ...c },
+    faces: m.image?.url ? [{ id: obj.id + '-face', type: 'image', url: m.image.url }] : [],
     propertyData: {
       address: c.address || m.name || 'Property Token',
       city: c.city || '',
